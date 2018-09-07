@@ -10,4 +10,6 @@ print("Uh huh, yeah, I don't really like "+responseClass+".")
 
 responseNumber = input("Listen. I gotta run. What's your number? ")
 
-print ("Alright. Got it. I'll text you later.")
+print("Alright. Got it. I'll text you later.")
+
+print("Checking for changes in Github")
