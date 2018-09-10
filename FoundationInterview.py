@@ -1,4 +1,8 @@
-//
+#DATE: September 9, 2018. DESCRIPTION: My work for the "Computer Conversations" project. A program that responds using various user
+#inputs, set against the backdrop of an interview for a shadowy government agency. SOURCES: All code is my own, only help that I got
+#was from Berk Gokmen, Class of 2021, who showed me how to properly use the int() function.
+
+print("FOUNDATION INTERVIEW by Lucas Eggers. DATE: September 9, 2018. DESCRIPTION: My work for the Computer Conversations project. A program that responds using various user inputs, set against the backdrop of an interview for a shadowy government agency. SOURCES: All code is my own, only help that I got was from Berk Gokmen, Class of 2021, who showed me how to properly use the //int() function.")
 
 print("INTERVIEW LOG SCP CLASS3PERSONNEL 807-2 TRANSCRIPT BEGIN: ")
 
@@ -21,7 +25,7 @@ responseSecurity = input("...and what's the answer to your security question? ")
 
 print("This won't influence your application's success, but I personally think "+responseSecurity+" is a cruel name for a dog.")
 
-responseYears = int(input("Okay. For how many years now have you been interacting with anomalous or powered objects in your daily line of work? (Integer)"))
+responseYears = int(input("Okay. For how many years now have you been interacting with anomalous or powered objects in your daily line of work? (Integer) "))
 
 if responseYears < 6:
 	print("Fresh blood, eh? Well, we can always use some new faces around the facility.")
