@@ -1,13 +1,13 @@
 import sys
 
-def commandCall(argNum):
+def argCall(argNum):
 	return sys.argv[int(argNum)]
 	
 
 if len(sys.argv) == 4:
-	x = float(commandCall(1))
-	y = float(commandCall(2))
-	z = float(commandCall(3))
+	x = float(argCall(1))
+	y = float(argCall(2))
+	z = float(argCall(3))
 
 	if x < y < z:
 		print("True");
