@@ -1,3 +1,7 @@
+# Date: September 13, 2018. 
+# Description: A simple calculator of wind chill temperature, provided the arguments Temperature and Velocity of Wind. 
+# Sources: None specifically, aside from those given in the assignment.
+
 # Fahrenheit to Celsius
 
 import sys

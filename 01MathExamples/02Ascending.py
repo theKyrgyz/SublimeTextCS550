@@ -1,3 +1,7 @@
+# Date: September 13, 2018. 
+# Description: A function that evaluates whether three given integer arguments are sorted in ascending, descending, or arbitrary order. 
+# Sources: Other than Esther An introducing me to the "elif" statement, none specifically, aside from those given in the assignment.
+
 import sys
 
 def argCall(argNum):

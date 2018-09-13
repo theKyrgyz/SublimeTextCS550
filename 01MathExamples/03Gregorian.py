@@ -1,5 +1,9 @@
 # 03Gregorian.py
 
+# Date: September 13, 2018. 
+# Description: A day-of-the-week calculator, provided one inputs the month, day, and year in the command terminal as arguments. 
+# Sources: Official Python documentation for lists and printing specific items from lists, as well as the assignment instructions and equations.
+
 """
 
 y0  =  y  -  (14  -  m)  /  12
