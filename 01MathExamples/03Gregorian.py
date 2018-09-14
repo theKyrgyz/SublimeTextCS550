@@ -43,13 +43,13 @@ dzero = (d + x + ((31*mzero)/12)) % 7
 print(str(dzero))
 """
 
-yzero = y - round((14-m)/12)
+yzero = y - (14-m)//12
 print(str(yzero))
-x = int(yzero + (yzero/4) - (yzero/100) + (yzero/400))
+x = yzero + (yzero//4) - (yzero//100) + (yzero//400)
 print(str(x))
-mzero = m + 12*round((14-m)/12) - 2
+mzero = m + 12*((14-m)//12) - 2
 print(str(mzero))
-dhalfway = d + x + int(((31*mzero)/12))
+dhalfway = d + x + ((31*mzero)//12)
 print(str(dhalfway))
 dfinal = (dhalfway)%7
 print(str(dfinal), "\n")
