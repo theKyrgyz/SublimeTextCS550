@@ -4,12 +4,7 @@
 
 # SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
 
-## Class Work today (9.18.18)
-
-def hi():
-    print("hello!")
-
-
+### NON-TRAVELLING DICTIONARIES AND FUNCTIONS:
 ## MOVING FROM ROOM TO ROOM
 
 roomDictionary = {
@@ -23,6 +18,9 @@ roomDictionary = {
 
 currentRoom = 1
 Cutscene = False
+
+# INVENTORY: Gotta work on 'take' command soon.
+inventory = []
 
 ## FUNCTION DEFINITIONS: STARTING A NON-TRAVEL "CUTSCENE" SEQUENCE
 
@@ -76,7 +74,8 @@ def travelling():
 
 ### FORMALLY BEGINNING THE GAME
 
-print("\n \n \n CAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
+print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
+# NOTE TO SELF: INSERT INSTRUCTIONS HERE
 currentRoom = 1
 travelling()
 
