@@ -1,17 +1,25 @@
+"""
 # capedyer.py
 
 # An adventure game by Lucas Eggers. Let's do this.
 
 # SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
+           https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing.
+           https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
 
+
+"""
 ### NON-TRAVELLING DICTIONARIES AND FUNCTIONS:
-## MOVING FROM ROOM TO ROOM
+## MOVING FROM ROOM TO ROOM, PLUS THE ITEMS IN EACH ROOM.
 
 roomDictionary = {
-        1 : {"name":"Command Center", "north" : 2, "west" : 3, "south" : 4},
-        2 : {"name":"Apex Room", "south":1},
-        3 : {"name":"Western Front", "east":1},
-        4 : {"name":"Confrontation Room", "north":1}
+        1 : {"name":"Command Center", "descrip":"There are many buttons here.", "north" : 2, "west" : 3, "south" : 4, "east":7, "rope":"f", "shovel":"f"},
+        2 : {"name":"Apex Room", "descrip":"You look out through the glass, over the icy waters.", "south":1, "north":5, "rope":"f", "shovel":"f"},
+        3 : {"name":"Strategy Room", "descrip":"The western flank of the facility.", "east":1, "rope":"f", "shovel":"f"},
+        4 : {"name":"Confrontation Room", "decsrip":"The general's office. Oof.", "north":1, "rope":"f", "shovel":"f"},
+        5 : {"name":"Hillside Steps", "descrip":"A series of rugged stairs leading from the facility down to the ocean.", "south":2, "north":6, "rope":"f", "shovel":"f"},
+        6 : {"name":"The Harbor", "descrip":"Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", "south":5, "rope":"f", "shovel":"f"},
+        7 : {"name":"The Skyway", "descrip":"A see-through tunnel connecting the command and living centers of the base.", "west":1, "rope":"f", "shovel":"f"}
 
 
 }
@@ -19,14 +27,76 @@ roomDictionary = {
 currentRoom = 1
 Cutscene = False
 
-# INVENTORY: Gotta work on 'take' command soon.
-inventory = []
+# INVENTORY: Gotta work on 'take' command soon, and good code for leaving it in rooms.
+inventory = ["rope", "shovel"]
 
-## FUNCTION DEFINITIONS: STARTING A NON-TRAVEL "CUTSCENE" SEQUENCE
+
+
+#####      DEFINING A CRAP-TON OF FUNCTIONS:
+
+
+
+## DEFINES THE 'GO' FUNCTION, allowing players to move between rooms.
+def goDirection():
+    global mainloopInput
+    global currentRoom
+    global newRoom
+    if mainloopInput[1] in roomDictionary[currentRoom]:
+        currentRoom = roomDictionary[currentRoom][mainloopInput[1]]
+        newRoom = True
+    else:
+        print("\nWhoops! That's not a viable direction.\n")
+        newRoom = False
+
+## Defining the QUIT function, with a check (are you sure?).
+def quitSure():
+    if input("Quit? y/n ") == "y":
+        quit()
+    else:
+        travelling()
+
+## Defining the INVENTORY functions - check inventory, drop items, etc.
+
+def inventoryCheck():
+    print("You have: ", end="")
+    print(*inventory, sep=", ", end="")
+    print(".")
+
+def inventoryDrop():
+    global WantToDrop
+    ## WantToDrop is the item the user wishes to drop.
+    if WantToDrop in inventory:
+        inventory.remove(WantToDrop)
+        if WantToDrop in roomDictionary[currentRoom]:
+            print("You successfully drop the "+WantToDrop+".")
+            roomDictionary[currentRoom][WantToDrop] = "t"
+        else:
+            print("It is thrown into the void, never to be seen again. \n(It appears you've dropped something that can't be dropped in this room. \nTry dropping it somewhere else.)")
+            roomDictionary[currentRoom][WantToDrop] = "f"
+    else:
+        print("You rummage through your backpack, but can't seem to find that item.")
+
+# Checking for items in rooms. THIS IS A MEAN PART
+
+def getKeysByValue(dictOfElements, valueToFind):
+    global roomKeys
+    roomKeys = list()
+    roomItems = dictOfElements.items()
+    # print("We are looking for", valueToFind)
+    for item in roomItems:
+        if item[1] == valueToFind:
+            if item[1] != 1:
+                roomKeys.append(item[0])
+                # print("Appending",item)
+    return roomKeys
+
+
+## STARTING CUTSCENES, stopping the travelling() loop.
 
 def beginCutscene(CutNum):
     Cutscene = True
     print("Your location:",roomDictionary[currentRoom]["name"]+".")
+    print(roomDictionary[currentRoom]["descrip"])
     if CutNum == 4:
         cutsceneOne()
     else:
@@ -44,38 +114,47 @@ def cutsceneOne():
         currentRoom = 1
         Cutscene = False
         travelling()
-        return
 
 
-### MAIN TRAVEL LOOP
+### MAIN VERB COMMAND INPUT LOOP
 
 def travelling():
     while Cutscene == False:
         global currentRoom
-        print("\n\nYou are now in :",roomDictionary[currentRoom]["name"])
+        global newRoom
+        if newRoom == True:
+            print("\n\nYou are now in :",roomDictionary[currentRoom]["name"])
+            print(roomDictionary[currentRoom]["descrip"])
+            getKeysByValue(roomDictionary[currentRoom], "t")
+            if roomKeys != []:
+                print("\nHere, you notice: ", sep=", ")
+            print(*roomKeys, sep=", ")
+        newRoom = False
+        global mainloopInput
         mainloopInput = input("\n>> ").lower().split()
-        if len(mainloopInput) == 2:
+        if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
             if mainloopInput[0] == "go":
-                if mainloopInput[1] in roomDictionary[currentRoom]:
-                    currentRoom = roomDictionary[currentRoom][mainloopInput[1]]
-                else:
-                    print("\nWhoops! That's not a viable direction.\n")
+                goDirection() # THIS IS IMPORTANT! IT CALLS THE GO FUNCTION FROM BEFORE. I do this in order to increase adaptability. And to make it less ugly.
+            elif mainloopInput[0] == "drop":
+                global WantToDrop
+                WantToDrop = mainloopInput[1]
+                inventoryDrop()
             else:
                 print("\nI don't understand that verb. Try 'go [direction]' or 'use [item]'.\n")
-            if currentRoom == 4:
+            if currentRoom == 4: # CHECKING FOR CUTSCENE TRIGGERS.
                 beginCutscene(4)
+        elif mainloopInput[0] == "i":
+            inventoryCheck()
         elif mainloopInput[0] == "q":
-            if input("Quit? y/n ") == "y":
-                quit()
-            else:
-                travelling()
+            quitSure()
         else:
-            print("Whoops! You need to provide at least two arguments for a command like 'go'. If your command is one-word, I just don't understand it.")
+            print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
 
 ### FORMALLY BEGINNING THE GAME
 
 print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
 # NOTE TO SELF: INSERT INSTRUCTIONS HERE
 currentRoom = 1
+newRoom = True
 travelling()
 
