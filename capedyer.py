@@ -3,6 +3,8 @@
 
 # An adventure game by Lucas Eggers. Let's do this.
 
+# DATE:
+# DESCRIPTION: 
 # SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
            https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing. (minor)
            https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
@@ -83,9 +85,9 @@ def inventoryTake():
     ## WantToTake is the item the user wants to take. Pretty self-explanatory.
     if WantToTake in roomDictionary[currentRoom]:
         if roomDictionary[currentRoom][WantToTake] == "t":
-            print("You swipe the heck out of that"+WantToTake+".")
+            print("You swipe the heck out of that "+WantToTake+".")
             roomDictionary[currentRoom][WantToTake] = "f"
-            inventory.add(WantToTake)
+            inventory.append(WantToTake)
         else: 
             print("Seems like the item you want isn't here. \nIt might be in another room, or you might not have typed it correctly.\n")
     else:
