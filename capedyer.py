@@ -114,11 +114,11 @@ def getKeysByValue(dictOfElements, valueToFind):
                 # print("Appending",item)
     return roomKeys
 
-# A simple help screen.
+# A simple HELP screen.
 def provideHelp():
     h = input("\n1) I need help with understanding how a text adventure / interactive fiction work functions.\n2) I need help with specific commands.\n> ")
     if h == "1":
-        print()
+        print("Well, I guess you need to tell Lucas to actually write all this out.")
     elif h == "2":
         print("A list of the current commands available:\n'go [direction]' moves the player in the direction specified. Current supported directions are north, south, east, and west.")
         print("'n', 's', 'e', and 'w' all function as shorthand for the 'go' command.\n'i' returns your entire inventory.\n'drop [thing]' drops an item, if it's in your inventory.")
@@ -127,7 +127,7 @@ def provideHelp():
         print("I don't quite understand that. Please put in 1 or 2. I'm returning you to the main game now.")
         travelling()
 
-## Eat function, purge function, moo function. I don't even know why I put this in.
+## STUPID COMMANDS - SKIP. Eat function, purge function, moo function. I don't even know why I put this in.
 
 def eatFunction():
     if WantToEat in inventory:
@@ -153,11 +153,13 @@ def moo():
     else:
         print("Thou art already a hooved creature, wanderer.")
 
-## SETTING UP LISTS because Abraham doesn't know how words work.
+## COMMAND ALTERNATIVE LISTS because Abraham Goodman doesn't know how words work.
 
-takeList = ["take","grab","pickup","pick up","swipe"]
+takeList = ["take","grab","pickup","pick up","swipe","pick"]
 dropList = ["drop","leave","yeet"]
+
 eatList = ["consume","eat","devour","cronch","inhale"]
+
 global thingsYouHaveEaten
 thingsYouHaveEaten = []
 adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revitalized","reborn","satanic","full of yummy bits inside"]
@@ -250,14 +252,14 @@ def travelling():
             moo()
         else:
             print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
-        if currentRoom == 4: 
+        if (currentRoom == 4) and (newRoom == True): 
             # CHECKING FOR CUTSCENE TRIGGERS.
             # print("We got to the currentRoom 4 check.")
             beginCutscene(4)
 
 ### FORMALLY BEGINNING THE GAME. Initiate sequence, codename: BOOGALOO.
 
-print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
+print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR, RADIOACTIVE COWS, AND BIG RED BUTTONS. \n")
 print("If you're not familiar with standard interactive fiction nomenclature, enter 'h' for help.\n")
 # NOTE TO SELF: INSERT INSTRUCTIONS TO PLAYER HERE
 currentRoom = 1
