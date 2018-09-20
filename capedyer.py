@@ -29,8 +29,6 @@ roomDictionary = {
 
 }
 
-currentRoom = 1
-Cutscene = False
 
 
 
@@ -79,6 +77,19 @@ def inventoryDrop():
             roomDictionary[currentRoom][WantToDrop] = "f"
     else:
         print("You rummage through your backpack, but can't seem to find that item.")
+
+def inventoryTake():
+    global WantToTake
+    ## WantToTake is the item the user wants to take. Pretty self-explanatory.
+    if WantToTake in roomDictionary[currentRoom]:
+        if roomDictionary[currentRoom][WantToTake] == "t":
+            print("You swipe the heck out of that"+WantToTake+".")
+            roomDictionary[currentRoom][WantToTake] = "f"
+            inventory.add(WantToTake)
+        else: 
+            print("Seems like the item you want isn't here. \nIt might be in another room, or you might not have typed it correctly.\n")
+    else:
+        print("I don't think that's a thing you can take. \nSomething went wrong, anyway. Try again.\n")
 
 # Checking for items in rooms. THIS IS A MEAN PART
 
@@ -155,10 +166,15 @@ def travelling():
                 global WantToDrop
                 WantToDrop = mainloopInput[1]
                 inventoryDrop()
+            elif mainloopInput[0] == "take":
+                global WantToTake
+                WantToTake = mainloopInput[1]
+                inventoryTake()
             else:
                 print("\nI don't understand that verb. Try 'go [direction]' or 'use [item]'.\n")
             if currentRoom == 4: # CHECKING FOR CUTSCENE TRIGGERS.
                 beginCutscene(4)
+        # IF THE COMMAND IS ONE WORD
         elif mainloopInput[0] == "i":
             inventoryCheck()
         elif mainloopInput[0] == "q":
@@ -186,6 +202,7 @@ print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \
 print("If you're not familiar with standard interactive fiction nomenclature, enter 'h' for help.\n")
 # NOTE TO SELF: INSERT INSTRUCTIONS TO PLAYER HERE
 currentRoom = 1
+Cutscene = False
 newRoom = True
 travelling()
 
