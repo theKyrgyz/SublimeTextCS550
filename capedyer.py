@@ -1,11 +1,11 @@
 """
-# capedyer.py
+capedyer.py
 
-# An adventure game by Lucas Eggers. Let's do this.
+An adventure game by Lucas Eggers. Let's do this.
 
-# DATE:
-# DESCRIPTION: 
-# SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
+DATE:
+DESCRIPTION: 
+SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
            https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing. (minor)
            https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
 
@@ -23,7 +23,7 @@ import random as random
 ## MOVING FROM ROOM TO ROOM, PLUS THE ITEMS IN EACH ROOM.
 
 roomDictionary = {
-        1 : {"name":"Command Center", "descrip":"There are many buttons here.", "north" : 2, "west" : 3, "south" : 4, "east":7, "rope":"f", "shovel":"f"},
+        1 : {"name":"Command Center", "descrip":"There are many buttons here.", "north" : 2, "west" : 3, "south" : 4, "east":7, "rope":"f", "shovel":"f", "button":"Buttons, mostly blue dot the control panel of the complicated machines. \nSome say things like 'contact', 'ignition', 'anaylze'. One gigantic red button says 'WARN'"},
         2 : {"name":"Apex Room", "descrip":"You look out through the glass, over the icy waters.", "south":1, "north":5, "rope":"f", "shovel":"f"},
         3 : {"name":"Strategy Room", "descrip":"The western flank of the facility.", "east":1, "rope":"f", "shovel":"f"},
         4 : {"name":"Confrontation Room", "descrip":"The general's office. Oof.", "north":1, "rope":"f", "shovel":"f"},
@@ -114,6 +114,25 @@ def getKeysByValue(dictOfElements, valueToFind):
                 # print("Appending",item)
     return roomKeys
 
+# Examining items in the room.
+
+def examineItem():
+    global WantToExamine
+    if WantToExamine in buttonExamination:
+        WantToExamine = "button"
+        examineCompletion()
+    else:
+        print("Sorry, you can't examine that.")
+
+def examineCompletion():
+    global WantToExamine
+    print("Examining:",WantToExamine)
+    if WantToExamine in roomDictionary[currentRoom]:
+        print("Upon closer examination, you see "+roomDictionary[currentRoom][WantToExamine]+".")
+    else:
+        print("Sorry, I couldn't find that in this room.")
+    travelling()
+
 # A simple HELP screen.
 def provideHelp():
     h = input("\n1) I need help with understanding how a text adventure / interactive fiction work functions.\n2) I need help with specific commands.\n> ")
@@ -164,6 +183,10 @@ global thingsYouHaveEaten
 thingsYouHaveEaten = []
 adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revitalized","reborn","satanic","full of yummy bits inside"]
 
+global examineList
+examineList = ["x", "examine", "investigate", "look"]
+buttonExamination = ["button","buttons","redbutton","bluebutton"]
+
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
 def beginCutscene(CutNum):
@@ -206,7 +229,19 @@ def travelling():
             print(*roomKeys, sep=", ")
         newRoom = False
         global mainloopInput
-        mainloopInput = input("\n>> ").lower().split()
+        global rawCommandInput
+        rawCommandInput = input("\n>> ")
+        mainloopInput = rawCommandInput.lower().split()
+        # If the player is attempting to examine something:
+        if mainloopInput[0] in examineList:
+            if len(mainloopInput) == 1:
+                print(roomDictionary[currentRoom]["descrip"])
+            else: # If the player wants to examine an object and not the room in general
+                mainloopInput.pop(0)
+                global WantToExamine
+                WantToExamine = "".join(mainloopInput)
+                examineItem()
+                travelling()
         if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
             if mainloopInput[0] == "go":
                 goDirection() # THIS IS IMPORTANT! IT CALLS THE GO FUNCTION FROM BEFORE. I do this in order to increase adaptability. And to make it less ugly.
@@ -243,13 +278,15 @@ def travelling():
             goDirection()
         elif mainloopInput[0] == "h":
             provideHelp()
-        elif mainloopInput[0] == "sudorestart":
+        elif mainloopInput[0] == "sudo":
             quit()
         elif mainloopInput[0] == "purge":
             purge()
         elif mainloopInput[0] == "moo":
             global cow
             moo()
+        elif mainloopInput[0] == "x":
+            print()
         else:
             print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
         if (currentRoom == 4) and (newRoom == True): 
