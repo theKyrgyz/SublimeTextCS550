@@ -183,7 +183,7 @@ def travelling():
 ### FORMALLY BEGINNING THE GAME. Initiate sequence, codename: BOOGALOO.
 
 print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
-print("If you're reading this it means Lucas was lazy and forgot to insert player instructions. \nHope you're familiar with standard interactive fiction nomenclature!\nEnter 'h' for help.\n")
+print("If you're not familiar with standard interactive fiction nomenclature, enter 'h' for help.\n")
 # NOTE TO SELF: INSERT INSTRUCTIONS TO PLAYER HERE
 currentRoom = 1
 newRoom = True
