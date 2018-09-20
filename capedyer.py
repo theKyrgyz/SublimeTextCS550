@@ -16,6 +16,9 @@ Then the main travelling() loop is placed, which is what the player will almost 
 FINALLY, the code that kicks off the game is found. Way at the bottom.
 
 """
+
+import random as random
+
 ### NON-TRAVELLING DICTIONARIES AND FUNCTIONS:
 ## MOVING FROM ROOM TO ROOM, PLUS THE ITEMS IN EACH ROOM.
 
@@ -23,7 +26,7 @@ roomDictionary = {
         1 : {"name":"Command Center", "descrip":"There are many buttons here.", "north" : 2, "west" : 3, "south" : 4, "east":7, "rope":"f", "shovel":"f"},
         2 : {"name":"Apex Room", "descrip":"You look out through the glass, over the icy waters.", "south":1, "north":5, "rope":"f", "shovel":"f"},
         3 : {"name":"Strategy Room", "descrip":"The western flank of the facility.", "east":1, "rope":"f", "shovel":"f"},
-        4 : {"name":"Confrontation Room", "decsrip":"The general's office. Oof.", "north":1, "rope":"f", "shovel":"f"},
+        4 : {"name":"Confrontation Room", "descrip":"The general's office. Oof.", "north":1, "rope":"f", "shovel":"f"},
         5 : {"name":"Hillside Steps", "descrip":"A series of rugged stairs leading from the facility down to the ocean.", "south":2, "north":6, "rope":"f", "shovel":"f"},
         6 : {"name":"The Harbor", "descrip":"Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", "south":5, "rope":"f", "shovel":"f"},
         7 : {"name":"The Skyway", "descrip":"A see-through tunnel connecting the command and living centers of the base.", "west":1, "rope":"f", "shovel":"f"}
@@ -59,12 +62,16 @@ def quitSure():
 
 ## Defining the INVENTORY functions - check inventory, drop items, etc.
 
+global inventory
 inventory = ["rope", "shovel"]
 
 def inventoryCheck():
-    print("You have: ", end="")
-    print(*inventory, sep=", ", end="")
-    print(".")
+    if inventory != []:
+        print("You have: ", end="")
+        print(*inventory, sep=", ", end="")
+        print(".")
+    else:
+        print("You've got absolutely nothing.")
 
 def inventoryDrop():
     global WantToDrop
@@ -72,7 +79,7 @@ def inventoryDrop():
     if WantToDrop in inventory:
         inventory.remove(WantToDrop)
         if WantToDrop in roomDictionary[currentRoom]:
-            print("You successfully drop the "+WantToDrop+".")
+            print("You successfully "+mainloopInput[0]+" the "+WantToDrop+".")
             roomDictionary[currentRoom][WantToDrop] = "t"
         else:
             print("It is thrown into the void, never to be seen again. \n(It appears you've dropped something that can't be dropped in this room. \nTry dropping it somewhere else.)")
@@ -85,7 +92,7 @@ def inventoryTake():
     ## WantToTake is the item the user wants to take. Pretty self-explanatory.
     if WantToTake in roomDictionary[currentRoom]:
         if roomDictionary[currentRoom][WantToTake] == "t":
-            print("You swipe the heck out of that "+WantToTake+".")
+            print("You "+mainloopInput[0]+" the heck out of that "+WantToTake+".")
             roomDictionary[currentRoom][WantToTake] = "f"
             inventory.append(WantToTake)
         else: 
@@ -120,6 +127,41 @@ def provideHelp():
         print("I don't quite understand that. Please put in 1 or 2. I'm returning you to the main game now.")
         travelling()
 
+## Eat function, purge function, moo function. I don't even know why I put this in.
+
+def eatFunction():
+    if WantToEat in inventory:
+        inventory.remove(WantToEat)
+        print("Consuming the "+WantToEat+", you suddenly have a profound feeling...\n...that you won't be able to recover this item once it recedes from your intestinal tracts.")
+    print("OM NOM NOM NOM NOM. How nutritious of a "+WantToEat+". You feel so utterly "+random.choice(adjectivesEat)+".")
+    thingsYouHaveEaten.append(WantToEat)
+
+def purge():
+    global thingsYouHaveEaten
+    inventory.append(thingsYouHaveEaten)
+    thingsYouHaveEaten = []
+    print("Bleh. You decide that your index finger will do the job well enough.\nSticking it far down your esophagus, you feel the rising in your digestive tract.\nSoon enough, you ralph outwards the entire contents of your stomach.\nSwiftly, you add them to your inventory.")
+
+def moo():
+    global cow
+    global inventory
+    if cow == False:
+        print("Thou art now a bovine. Unfortunately, bovines are unable to posses any items. You eat them all.")
+        cow = True
+        thingsYouHaveEaten.append(inventory)
+        inventory = []
+    else:
+        print("Thou art already a hooved creature, wanderer.")
+
+## SETTING UP LISTS because Abraham doesn't know how words work.
+
+takeList = ["take","grab","pickup","pick up","swipe"]
+dropList = ["drop","leave","yeet"]
+eatList = ["consume","eat","devour","cronch","inhale"]
+global thingsYouHaveEaten
+thingsYouHaveEaten = []
+adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revitalized","reborn","satanic","full of yummy bits inside"]
+
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
 def beginCutscene(CutNum):
@@ -127,6 +169,7 @@ def beginCutscene(CutNum):
     print("Your location:",roomDictionary[currentRoom]["name"]+".")
     print(roomDictionary[currentRoom]["descrip"])
     if CutNum == 4:
+        # print("WE GOT TO THE FOUR CHECK")
         cutsceneGeneralAnatuq()
     else:
         return
@@ -134,6 +177,7 @@ def beginCutscene(CutNum):
 ## CUTSCENE 'GENERAL' PATHS
 
 def cutsceneGeneralAnatuq():
+    # print("CAN YOU READ THIS?")
     choiceOne = input("General Anatuq walks up to you. Uh oh. Do you: \n\n1) snatch his cigarette right out of his mouth, or \n\n2) try to greet him in a friendly manner?\n\n>> ")
     if choiceOne == "1":
         print("\n\nGeneral Anatuq is most displeased. \nWhen you regain consciousness, you find yourself abandoned in the frigid wastes outside the base.\n\n")
@@ -164,18 +208,20 @@ def travelling():
         if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
             if mainloopInput[0] == "go":
                 goDirection() # THIS IS IMPORTANT! IT CALLS THE GO FUNCTION FROM BEFORE. I do this in order to increase adaptability. And to make it less ugly.
-            elif mainloopInput[0] == "drop":
+            elif mainloopInput[0] in dropList:
                 global WantToDrop
                 WantToDrop = mainloopInput[1]
                 inventoryDrop()
-            elif mainloopInput[0] == "take":
+            elif mainloopInput[0] in takeList:
                 global WantToTake
                 WantToTake = mainloopInput[1]
                 inventoryTake()
+            elif mainloopInput[0] in eatList:
+                global WantToEat
+                WantToEat = mainloopInput[1]
+                eatFunction()
             else:
-                print("\nI don't understand that verb. Try 'go [direction]' or 'use [item]'.\n")
-            if currentRoom == 4: # CHECKING FOR CUTSCENE TRIGGERS.
-                beginCutscene(4)
+                print("\nI don't understand that verb. Try 'go [direction]' or 'take [item]'.\n")
         # IF THE COMMAND IS ONE WORD
         elif mainloopInput[0] == "i":
             inventoryCheck()
@@ -195,8 +241,19 @@ def travelling():
             goDirection()
         elif mainloopInput[0] == "h":
             provideHelp()
+        elif mainloopInput[0] == "sudorestart":
+            quit()
+        elif mainloopInput[0] == "purge":
+            purge()
+        elif mainloopInput[0] == "moo":
+            global cow
+            moo()
         else:
             print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
+        if currentRoom == 4: 
+            # CHECKING FOR CUTSCENE TRIGGERS.
+            # print("We got to the currentRoom 4 check.")
+            beginCutscene(4)
 
 ### FORMALLY BEGINNING THE GAME. Initiate sequence, codename: BOOGALOO.
 
@@ -206,5 +263,6 @@ print("If you're not familiar with standard interactive fiction nomenclature, en
 currentRoom = 1
 Cutscene = False
 newRoom = True
+cow = False
 travelling()
 
