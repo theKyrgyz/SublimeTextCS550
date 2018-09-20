@@ -7,6 +7,11 @@
            https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing.
            https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
 
+This code's organized a bit weirdly, just because of how Python runs through its code. First, the room layout is defined.
+Then, movement between rooms is laid down, plus a quit command. After that, an inventory system is created, and rooms are checked for items.
+Next, "cutscenes" are laid down - I define cutscenes as any player-code interaction that isn't done through the lens of room movement and travel.
+Then the main travelling() loop is placed, which is what the player will almost always be using. It calls the functions listed above.
+FINALLY, the code that kicks off the game is found. Way at the bottom.
 
 """
 ### NON-TRAVELLING DICTIONARIES AND FUNCTIONS:
@@ -26,9 +31,6 @@ roomDictionary = {
 
 currentRoom = 1
 Cutscene = False
-
-# INVENTORY: Gotta work on 'take' command soon, and good code for leaving it in rooms.
-inventory = ["rope", "shovel"]
 
 
 
@@ -56,6 +58,8 @@ def quitSure():
         travelling()
 
 ## Defining the INVENTORY functions - check inventory, drop items, etc.
+
+inventory = ["rope", "shovel"]
 
 def inventoryCheck():
     print("You have: ", end="")
@@ -98,13 +102,13 @@ def beginCutscene(CutNum):
     print("Your location:",roomDictionary[currentRoom]["name"]+".")
     print(roomDictionary[currentRoom]["descrip"])
     if CutNum == 4:
-        cutsceneOne()
+        cutsceneGeneralAnatuq()
     else:
         return
 
-## CUTSCENE ONE PATHS
+## CUTSCENE 'GENERAL' PATHS
 
-def cutsceneOne():
+def cutsceneGeneralAnatuq():
     choiceOne = input("General Anatuq walks up to you. Uh oh. Do you: \n\n1) snatch his cigarette right out of his mouth, or \n\n2) try to greet him in a friendly manner?\n\n>> ")
     if choiceOne == "1":
         print("\n\nGeneral Anatuq is most displeased. \nWhen you regain consciousness, you find yourself abandoned in the frigid wastes outside the base.\n\n")
@@ -147,13 +151,28 @@ def travelling():
             inventoryCheck()
         elif mainloopInput[0] == "q":
             quitSure()
+        elif mainloopInput[0] == "n":
+            mainloopInput = ["go", "north"]
+            goDirection()
+        elif mainloopInput[0] == "e":
+            mainloopInput = ["go", "east"]
+            goDirection()
+        elif mainloopInput[0] == "s":
+            mainloopInput = ["go", "south"]
+            goDirection()
+        elif mainloopInput[0] == "w":
+            mainloopInput = ["go", "west"]
+            goDirection()
+        elif mainloopInput[0] == "h":
+            print("There is no help for you now. Only radioactivity. And laziness.")
         else:
             print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
 
-### FORMALLY BEGINNING THE GAME
+### FORMALLY BEGINNING THE GAME. Initiate sequence, codename: BOOGALOO.
 
 print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
-# NOTE TO SELF: INSERT INSTRUCTIONS HERE
+print("If you're reading this it means Lucas was lazy and forgot to insert player instructions. \nHope you're familiar with standard interactive fiction nomenclature!\n\n")
+# NOTE TO SELF: INSERT INSTRUCTIONS TO PLAYER HERE
 currentRoom = 1
 newRoom = True
 travelling()
