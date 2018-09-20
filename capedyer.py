@@ -4,10 +4,10 @@
 # An adventure game by Lucas Eggers. Let's do this.
 
 # SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
-           https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing.
+           https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing. (minor)
            https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
 
-This code's organized a bit weirdly, just because of how Python runs through its code. First, the room layout is defined.
+This code's organized a bit weirdly, just because of how Python runs through its code sequentially. First, the room layout is defined.
 Then, movement between rooms is laid down, plus a quit command. After that, an inventory system is created, and rooms are checked for items.
 Next, "cutscenes" are laid down - I define cutscenes as any player-code interaction that isn't done through the lens of room movement and travel.
 Then the main travelling() loop is placed, which is what the player will almost always be using. It calls the functions listed above.
@@ -94,6 +94,18 @@ def getKeysByValue(dictOfElements, valueToFind):
                 # print("Appending",item)
     return roomKeys
 
+# A simple help screen.
+def provideHelp():
+    h = input("\n1) I need help with understanding how a text adventure / interactive fiction work functions.\n2) I need help with specific commands.\n> ")
+    if h == "1":
+        print()
+    elif h == "2":
+        print("A list of the current commands available:\n'go [direction]' moves the player in the direction specified. Current supported directions are north, south, east, and west.")
+        print("'n', 's', 'e', and 'w' all function as shorthand for the 'go' command.\n'i' returns your entire inventory.\n'drop [thing]' drops an item, if it's in your inventory.")
+        print("'q' quits the game. 'h' provides help.")
+    else:
+        print("I don't quite understand that. Please put in 1 or 2. I'm returning you to the main game now.")
+        travelling()
 
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
@@ -164,14 +176,14 @@ def travelling():
             mainloopInput = ["go", "west"]
             goDirection()
         elif mainloopInput[0] == "h":
-            print("There is no help for you now. Only radioactivity. And laziness.")
+            provideHelp()
         else:
             print("Whoops! You need to provide at least two arguments for a command like 'go'. \nIf your command is one word, I just don't understand it.")
 
 ### FORMALLY BEGINNING THE GAME. Initiate sequence, codename: BOOGALOO.
 
 print("\n\n\n\tCAPE DYER. A THRILLING TALE OF NUCLEAR WAR AND BIG RED BUTTONS. \n")
-print("If you're reading this it means Lucas was lazy and forgot to insert player instructions. \nHope you're familiar with standard interactive fiction nomenclature!\n\n")
+print("If you're reading this it means Lucas was lazy and forgot to insert player instructions. \nHope you're familiar with standard interactive fiction nomenclature!\nEnter 'h' for help.\n")
 # NOTE TO SELF: INSERT INSTRUCTIONS TO PLAYER HERE
 currentRoom = 1
 newRoom = True
