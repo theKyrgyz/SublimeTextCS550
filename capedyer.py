@@ -25,11 +25,12 @@ import random as random
 roomDictionary = {
         1 : {"name":"Command Center", "descrip":"There are many buttons here.", "north" : 2, "west" : 3, "south" : 4, "east":7, "rope":"f", "shovel":"f", "button":"Buttons, mostly blue dot the control panel of the complicated machines. \nSome say things like 'contact', 'ignition', 'anaylze'. One gigantic red button says 'WARN'"},
         2 : {"name":"Apex Room", "descrip":"You look out through the glass, over the icy waters.", "south":1, "north":5, "rope":"f", "shovel":"f"},
-        3 : {"name":"Strategy Room", "descrip":"The western flank of the facility.", "east":1, "rope":"f", "shovel":"f"},
+        3 : {"name":"Strategy Room", "descrip":"The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", "east":1, "rope":"f", "shovel":"f", "table":"The table is little more than a couple 2x4s nailed together. \nSpare no expense, heh.", "map":"The map appears to be from American aviation agencies. \nIt shows criss-crossing vector, local airstrips, and - oh! \nThere's Cape Dyer. Home sweet home. \nWooden planes track real-time locations of aircraft.", "woodenplanes":"Most are bush planes doing local service to Inuit towns, \nbut some are intencontinental jetliners doing circumpolar trips. \nHot stuff."},
         4 : {"name":"Confrontation Room", "descrip":"The general's office. Oof.", "north":1, "rope":"f", "shovel":"f"},
         5 : {"name":"Hillside Steps", "descrip":"A series of rugged stairs leading from the facility down to the ocean.", "south":2, "north":6, "rope":"f", "shovel":"f"},
         6 : {"name":"The Harbor", "descrip":"Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", "south":5, "rope":"f", "shovel":"f"},
-        7 : {"name":"The Skyway", "descrip":"A see-through tunnel connecting the command and living centers of the base.", "west":1, "rope":"f", "shovel":"f"}
+        7 : {"name":"The Skyway", "descrip":"A see-through tunnel connecting the command and living centers of the base.", "west":1, "east":8, "rope":"f", "shovel":"f"},
+        8 : {"name":"Living Quarters", "descrip":"A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "west":7, "north":9, "rope":"f", "shovel":"f", "fridge":"A prized amenities, if redundant at times. You open it slowly, eyeing Nathan's spaghetti. \nYou love spaghetti."},
 
 
 }
@@ -68,8 +69,7 @@ inventory = ["rope", "shovel"]
 def inventoryCheck():
     if inventory != []:
         print("You have: ", end="")
-        print(*inventory, sep=", ", end="")
-        print(".")
+        print(', '.join(inventory), end=".")
     else:
         print("You've got absolutely nothing.")
 
@@ -77,12 +77,12 @@ def inventoryDrop():
     global WantToDrop
     ## WantToDrop is the item the user wishes to drop.
     if WantToDrop in inventory:
-        inventory.remove(WantToDrop)
         if WantToDrop in roomDictionary[currentRoom]:
+            inventory.remove(WantToDrop)
             print("You successfully "+mainloopInput[0]+" the "+WantToDrop+".")
             roomDictionary[currentRoom][WantToDrop] = "t"
         else:
-            print("It is thrown into the void, never to be seen again. \n(It appears you've dropped something that can't be dropped in this room. \nTry dropping it somewhere else.)")
+            print("It is thrown into the void, never to be seen again. \nJust kidding. \n(It appears you've dropped something that can't be dropped in this room. \nTry dropping it somewhere else.)")
             roomDictionary[currentRoom][WantToDrop] = "f"
     else:
         print("You rummage through your backpack, but can't seem to find that item.")
@@ -121,14 +121,23 @@ def examineItem():
     if WantToExamine in buttonExamination:
         WantToExamine = "button"
         examineCompletion()
+    if WantToExamine in woodenExamination:
+        WantToExamine = "woodenplanes"
+        examineCompletion()
+    if WantToExamine == ("map" or "mapofBaffinIsland"):
+        WantToExamine = "map"
+        examineCompletion()
+    if WantToExamine == ("fridge" or "refrigerator"):
+        WantToExamine = "fridge"
+        examineCompletion()
     else:
-        print("Sorry, you can't examine that.")
+        examineCompletion()
 
 def examineCompletion():
     global WantToExamine
     print("Examining:",WantToExamine)
     if WantToExamine in roomDictionary[currentRoom]:
-        print("Upon closer examination, you see "+roomDictionary[currentRoom][WantToExamine]+".")
+        print(roomDictionary[currentRoom][WantToExamine])
     else:
         print("Sorry, I couldn't find that in this room.")
     travelling()
@@ -149,15 +158,19 @@ def provideHelp():
 ## STUPID COMMANDS - SKIP. Eat function, purge function, moo function. I don't even know why I put this in.
 
 def eatFunction():
+    global WantToEat
     if WantToEat in inventory:
         inventory.remove(WantToEat)
         print("Consuming the "+WantToEat+", you suddenly have a profound feeling...\n...that you won't be able to recover this item once it recedes from your intestinal tracts.")
     print("OM NOM NOM NOM NOM. How nutritious of a "+WantToEat+". You feel so utterly "+random.choice(adjectivesEat)+".")
-    thingsYouHaveEaten.append(WantToEat)
+    WantToEat = WantToEat.strip('"\'')
+    thingsYouHaveEaten.append(WantToEat.strip('"\''))
 
 def purge():
     global thingsYouHaveEaten
-    inventory.append(thingsYouHaveEaten)
+    thingsYouHaveEaten = str(thingsYouHaveEaten)[1:-1]
+    thingsYouHaveEaten = thingsYouHaveEaten.strip('"\'')
+    inventory.append(thingsYouHaveEaten.strip('"\''))
     thingsYouHaveEaten = []
     print("Bleh. You decide that your index finger will do the job well enough.\nSticking it far down your esophagus, you feel the rising in your digestive tract.\nSoon enough, you ralph outwards the entire contents of your stomach.\nSwiftly, you add them to your inventory.")
 
@@ -172,7 +185,7 @@ def moo():
     else:
         print("Thou art already a hooved creature, wanderer.")
 
-## COMMAND ALTERNATIVE LISTS because Abraham Goodman doesn't know how words work.
+## COMMAND ALTERNATIVE LISTS because Abraham Goodman doesn't know how words work, plus LISTS FOR INTERPRETING EXAMINING THINGS.
 
 takeList = ["take","grab","pickup","pick up","swipe","pick"]
 dropList = ["drop","leave","yeet"]
@@ -186,6 +199,7 @@ adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revital
 global examineList
 examineList = ["x", "examine", "investigate", "look"]
 buttonExamination = ["button","buttons","redbutton","bluebutton"]
+woodenExamination = ["woodenaircraft","woodenpieces","woodplanes","woodpieces","woodaircraft","aircraft","pieces"]
 
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
@@ -232,6 +246,8 @@ def travelling():
         global rawCommandInput
         rawCommandInput = input("\n>> ")
         mainloopInput = rawCommandInput.lower().split()
+        if mainloopInput == []:
+            travelling()
         # If the player is attempting to examine something:
         if mainloopInput[0] in examineList:
             if len(mainloopInput) == 1:
@@ -262,6 +278,8 @@ def travelling():
         # IF THE COMMAND IS ONE WORD
         elif mainloopInput[0] == "i":
             inventoryCheck()
+        elif mainloopInput[0] == "qy":
+            quit()
         elif mainloopInput[0] == "q":
             quitSure()
         elif mainloopInput[0] == "n":
