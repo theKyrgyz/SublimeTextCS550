@@ -30,12 +30,20 @@ roomDictionary = {
         5 : {"name":"Hillside Steps", "descrip":"A series of rugged stairs leading from the facility down to the ocean.", "south":2, "north":6, "rope":"f", "shovel":"f"},
         6 : {"name":"The Harbor", "descrip":"Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", "south":5, "rope":"f", "shovel":"f"},
         7 : {"name":"The Skyway", "descrip":"A see-through tunnel connecting the command and living centers of the base.", "west":1, "east":8, "rope":"f", "shovel":"f"},
-        8 : {"name":"Living Quarters", "descrip":"A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "west":7, "north":9, "rope":"f", "shovel":"f", "fridge":"A prized amenities, if redundant at times. You open it slowly, eyeing Nathan's spaghetti. \nYou love spaghetti."},
-
+        8 : {"name":"Living Quarters", "descrip":"A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "west":7, "north":9, "rope":"f", "shovel":"f", "fridge":"A prized amenities, if redundant at times. You open it slowly, eyeing Nathan's spaghetti. \nYou love spaghetti.", "door":"The door is old and rusty, but reinforced with newer hinges. You'll need a key to get past it."},
+        9 : {"name":"Radar Arrays", "descrip":"Gigantic lattice-pattern metal towers sit, perched on the plateau above the cape, taking information from hundreds of miles around.", "south":8, "rope":"f", "shovel":"f"},
 
 }
 
+# Locked doors:
+    # The one from 8 to 9:
+lockedDoorLivingArrays = "f"
 
+def lockedDoorEightPassage():
+    if lockedDoorLivingArrays == "t":
+        return True
+    else:
+        return False
 
 
 #####      DEFINING A CRAP-TON OF FUNCTIONS:
@@ -47,12 +55,21 @@ def goDirection():
     global mainloopInput
     global currentRoom
     global newRoom
-    if mainloopInput[1] in roomDictionary[currentRoom]:
-        currentRoom = roomDictionary[currentRoom][mainloopInput[1]]
-        newRoom = True
+    if ((currentRoom == 8) and (mainloopInput == ["go", "north"])) or ((currentRoom == 9) and (mainloopInput == ["go", "south"])):
+        if lockedDoorEightPassage() == False:
+            print("Hmm. Looks like this door has been locked. You're gonna need to find a key.")
+        else:
+            print("This door is no match for you and your mighty key-finding skillz!")
+            currentRoom = 9
+            newRoom = True
+            travelling()
     else:
-        print("\nWhoops! That's not a viable direction.\n")
-        newRoom = False
+        if mainloopInput[1] in roomDictionary[currentRoom]:
+            currentRoom = roomDictionary[currentRoom][mainloopInput[1]]
+            newRoom = True
+        else:
+            print("\nWhoops! That's not a viable direction.\n")
+            newRoom = False
 
 ## Defining the QUIT function, with a check (are you sure?).
 def quitSure():
@@ -192,6 +209,8 @@ dropList = ["drop","leave","yeet"]
 
 eatList = ["consume","eat","devour","cronch","inhale"]
 
+possibleDirections = ["west","north","south","east"]
+
 global thingsYouHaveEaten
 thingsYouHaveEaten = []
 adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revitalized","reborn","satanic","full of yummy bits inside"]
@@ -235,12 +254,16 @@ def travelling():
         global currentRoom
         global newRoom
         if newRoom == True:
-            print("\n\nYou are now in :",roomDictionary[currentRoom]["name"])
+            print("\n\nYou are now in: ",roomDictionary[currentRoom]["name"])
             print(roomDictionary[currentRoom]["descrip"])
             getKeysByValue(roomDictionary[currentRoom], "t")
             if roomKeys != []:
                 print("\nHere, you notice: ", sep=", ")
             print(*roomKeys, sep=", ")
+            print("The possible exits are: ")
+            for direction in possibleDirections:
+                if direction in roomDictionary[currentRoom]:
+                    print(direction)
         newRoom = False
         global mainloopInput
         global rawCommandInput
