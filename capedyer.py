@@ -15,6 +15,13 @@ Next, "cutscenes" are laid down - I define cutscenes as any player-code interact
 Then the main travelling() loop is placed, which is what the player will almost always be using. It calls the functions listed above.
 FINALLY, the code that kicks off the game is found. Way at the bottom.
 
+lockedDoor
+goDirection / goDirections
+quitSure
+inventory: check, drop, take
+getKeysByValue?
+
+
 """
 
 import random as random
@@ -36,11 +43,11 @@ roomDictionary = {
 }
 
 # Locked doors:
-    # The one from 8 to 9:
-lockedDoorLivingArrays = "f"
+# The one from 8 to 9:
+lockedDoorNortheast = "f"
 
-def lockedDoorEightPassage():
-    if lockedDoorLivingArrays == "t":
+def lockedDoorNortheastPassage():
+    if lockedDoorNortheast == "t":
         return True
     else:
         return False
@@ -56,7 +63,7 @@ def goDirection():
     global currentRoom
     global newRoom
     if ((currentRoom == 8) and (mainloopInput == ["go", "north"])) or ((currentRoom == 9) and (mainloopInput == ["go", "south"])):
-        if lockedDoorEightPassage() == False:
+        if lockedDoorNortheastPassage() == False:
             print("Hmm. Looks like this door has been locked. You're gonna need to find a key.")
         else:
             print("This door is no match for you and your mighty key-finding skillz!")
@@ -86,9 +93,9 @@ inventory = ["rope", "shovel"]
 def inventoryCheck():
     if inventory != []:
         print("You have: ", end="")
-        print(', '.join(inventory), end=".")
+        print(', '.join(inventory), end=".\n")
     else:
-        print("You've got absolutely nothing.")
+        print("You've got absolutely nothing.\n")
 
 def inventoryDrop():
     global WantToDrop
@@ -253,6 +260,7 @@ def travelling():
     while Cutscene == False:
         global currentRoom
         global newRoom
+        # Giving the player about the room they just moved to.
         if newRoom == True:
             print("\n\nYou are now in: ",roomDictionary[currentRoom]["name"])
             print(roomDictionary[currentRoom]["descrip"])
