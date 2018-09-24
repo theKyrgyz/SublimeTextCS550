@@ -4,7 +4,7 @@ class RoomClass:
 
     kind = 'room'
 
-    def __init__(self, number, name, descrip, north, east, south, west, rope, shovel):
+    def __init__(self, number, name, descrip, north, east, south, west, rope, shovel, button, woodenplanes, mapBaffin, fridge):
         self.number = number
         self.name = name
         self.descrip = descrip
@@ -14,21 +14,131 @@ class RoomClass:
         self.west = west
         self.rope = rope
         self.shovel = shovel
+        self.button = button
+        self.woodenplanes = woodenplanes
+        self.map = mapBaffin
+        self.fridge = fridge
 
 
-CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens.", "Apex Room", "The Skyway", "Confrontation Room", "Strategy Room", False, False)
-ApexRoom = RoomClass(2, "Apex Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, True)
-StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False)
-ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, False, False)
-HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Apex Room", None, False, False)
-TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False)
-TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Room", False, False)
-LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False)
-RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, None, "Living Quarters", None, False, False)
+CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens.", "Apex Room", "The Skyway", "Confrontation Room", "Strategy Room", False, False, None, None, None, None)
+ApexRoom = RoomClass(2, "Apex Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, True, None, None, None, None)
+StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, None, None, None, None)
+ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, False, False, None, None, None, None)
+HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Apex Room", None, False, False, None, None, None, None)
+TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False, None, None, None, None)
+TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Room", False, False, None, None, None, None)
+LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False, None, None, None, None)
+RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, None, "Living Quarters", None, False, False, None, None, None, None)
 
 listRooms = [CommandCenter, ApexRoom, StrategyRoom, ConfrontationRoom, HillsideSteps, TheHarbor, TheSkyway, LivingQuarters, RadarArray]
 
+# a couple non-direction functions
 
+def quitSure():
+    if input("Quit? y/n ") == "y":
+        quit()
+    else:
+        travelling()
+
+# inventory system
+
+global inventory
+inventory = ["rope"]
+
+def inventoryCheck():
+    if inventory != []:
+        print("You have: ", end="")
+        print(', '.join(inventory), end=".\n")
+    else:
+        print("You've got absolutely nothing.\n")
+
+def inventoryDrop():
+    global WantToDrop
+    ## WantToDrop is the item the user wishes to drop.
+    if WantToDrop in inventory:
+        if currentRoom.WantToDrop == False:
+            inventory.remove(WantToDrop)
+            print("You successfully "+mainloopInput[0]+" the "+WantToDrop+".")
+            currentRoom.WantToDrop = True
+        else:
+            print("It is thrown into the void, never to be seen again. \nJust kidding. \n(It appears you've dropped something that can't be dropped in this room. \nTry dropping it somewhere else.)")
+            currentRoom.WantToDrop = False
+    else:
+        print("You rummage through your backpack, but can't seem to find that item.")
+
+def inventoryTake():
+    global WantToTake
+    ## WantToTake is the item the user wants to take. Pretty self-explanatory.
+    if getattr(currentRoom,WantToTake) != ValueError:
+        if getattr(currentRoom,WantToTake) == True:
+            print("You "+mainloopInput[0]+" the heck out of that "+WantToTake+".")
+            currentRoom.WantToTake = False
+            inventory.append(WantToTake)
+        else: 
+            print("Seems like the item you want isn't here. \nIt might be in another room, or you might not have typed it correctly.\n")
+    else:
+        print("I don't think that's a thing you can take. \nSomething went wrong, anyway. Try again.\n")
+
+
+def getItemsFromRoom(inputCurrentRoom, valuetoFind):
+    global thingsInRoom
+    global itemToGet
+    thingsInRoom = list()
+    for itemToGet in availableItemsList:
+        if getattr(inputCurrentRoom, itemToGet) == valuetoFind:
+            thingsInRoom.append(itemToGet)
+            # print("Appending",itemToGet)
+    return thingsInRoom
+
+# examining objects
+
+def examineItem():
+    global WantToExamine
+    if WantToExamine in buttonExamination:
+        WantToExamine = "button"
+        examineCompletion()
+    if WantToExamine in woodenExamination:
+        WantToExamine = "woodenplanes"
+        examineCompletion()
+    if WantToExamine == ("map" or "mapofBaffinIsland"):
+        WantToExamine = "map"
+        examineCompletion()
+    if WantToExamine == ("fridge" or "refrigerator"):
+        WantToExamine = "fridge"
+        examineCompletion()
+    else:
+        examineCompletion()
+
+def examineCompletion():
+    global WantToExamine
+    print("Examining:",WantToExamine)
+    if getattr(currentRoom,WantToExamine) != None:
+        print(getattr(currentRoom,WantToExamine))
+    else:
+        print("Sorry, I couldn't find that in this room.")
+    travelling()
+
+# lists defined
+
+takeList = ["take","grab","pickup","pick up","swipe","pick"]
+dropList = ["drop","leave","yeet"]
+
+eatList = ["consume","eat","devour","cronch","inhale"]
+
+possibleDirections = ["west","north","south","east"]
+
+global thingsYouHaveEaten
+thingsYouHaveEaten = []
+adjectivesEat = ["invigorated","rejuvenated","defenestrated","like God","revitalized","reborn","satanic","full of yummy bits inside"]
+
+global examineList
+examineList = ["x", "examine", "investigate", "look"]
+buttonExamination = ["button","buttons","redbutton","bluebutton"]
+woodenExamination = ["woodenaircraft","woodenpieces","woodplanes","woodpieces","woodaircraft","aircraft","pieces"]
+
+availableItemsList = ["rope", "shovel"]
+
+# goDirection and the variables it uses
 
 global Cutscene
 global newRoom
@@ -41,6 +151,7 @@ NorthList = ["go north","north","n","go n"]
 WestList = ["go west","west","w","go w"]
 SouthList = ["go south","south","s","go s"]
 EastList = ["go east","east","e","go e"]
+AllDirectionList = ["go north","north","n","go n","go west","west","w","go w","go south","south","s","go s","go east","east","e","go e"]
 
 def goingNorth():
     global currentRoom
@@ -112,6 +223,14 @@ def travelling():
             print("\n\nYou are now in: ", end="")
             print(currentRoom.name)
             print(currentRoom.descrip)
+            getItemsFromRoom(currentRoom, True)
+            if thingsInRoom != []:
+                print("\nHere, you notice: ", sep=", ")
+            print(*thingsInRoom, sep=", ")
+            print("The possible exits are: ")
+            for direction in possibleDirections:
+                if getattr(currentRoom,direction) != None:
+                    print(direction)
         global mainloopInput
         global rawCommandInput
         newRoom = False
@@ -119,6 +238,28 @@ def travelling():
         mainloopInput = rawCommandInput.lower().split()
         if mainloopInput == []:
             travelling()
+        if mainloopInput[0] in examineList:
+            if len(mainloopInput) == 1:
+                print(currentRoom.descrip)
+            else: # If the player wants to examine an object and not the room in general
+                mainloopInput.pop(0)
+                global WantToExamine
+                WantToExamine = "".join(mainloopInput)
+                examineItem()
+                travelling()
+        if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
+            if mainloopInput[0] == "go":
+                break
+            elif mainloopInput[0] in dropList:
+                global WantToDrop
+                WantToDrop = mainloopInput[1]
+                inventoryDrop()
+            elif mainloopInput[0] in takeList:
+                global WantToTake
+                WantToTake = mainloopInput[1]
+                inventoryTake()
+            elif not (rawCommandInput in AllDirectionList):
+                print("\nI don't understand that verb. Try 'go [direction]' or 'take [item]'.\n")
         elif rawCommandInput in NorthList:
             if currentRoom.north != None:
                 goingNorth()
@@ -143,7 +284,11 @@ def travelling():
                 print(newRoom)
             else:
                 print("You can't go east from here.")
+        elif mainloopInput[0] == "i":
+            inventoryCheck()
         elif rawCommandInput == "q":
+            quitSure()
+        elif rawCommandInput == "qy":
             quit()
         else:
             print("Whoops! I don't quite understand that.")
