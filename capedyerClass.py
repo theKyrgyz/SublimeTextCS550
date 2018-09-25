@@ -10,7 +10,10 @@ DESCRIPTION: Cape Dyer is a proof-of-concept for expansive room-based interactio
         narrative as I would've liked, there's a whole lot of functionality here. Inventory systems, directional movement, examining items, an objectives/mission
         list, help screens, and multiple characters - with conversations that impact the flow of the story, and how you converse with other characters - are just some
         of the features of this game. I've worked for a week on this, and I'll probably continue to do so after handing in the project (I just really like 
-        adventure games). In any case, thanks for playing.
+        adventure games). 
+        In the future I hope to implement a branching narrative system, where the player arrives at one of three endings, based on which
+        character they side with. I think that'd be cool and I already have the structure for it in place.
+        In any case, thanks for playing.
 SOURCES: http://usingpython.com/python-rpg-game/ for the proper syntax when using dictionaries for moving between rooms.
            https://stackoverflow.com/questions/11178061/print-list-without-brackets-in-a-single-row for clean nice list printing. (minor)
            https://thispointer.com/python-how-to-find-keys-by-value-in-dictionary/ for getting a list of the keys which carry a certain value.
