@@ -111,7 +111,7 @@ def inventoryDrop():
     global WantToDrop
     ## WantToDrop is the item the user wishes to drop.
     if WantToDrop in inventory:
-        if currentRoom.WantToDrop == False:
+        if getattr(currentRoom,WantToDrop) == False:
             inventory.remove(WantToDrop)
             print("You successfully "+mainloopInput[0]+" the "+WantToDrop+".")
             currentRoom.WantToDrop = True
@@ -401,12 +401,12 @@ def beginCutsceneAtatuqFresnelFinish():
         NathanState[1] = 2
         NathanState[2] = 0
         AtatuqObjectives.append("* Ask Ramona about collecting soil samples.")
-        travelling()
     elif choice == "2":
         print("'Alright. But get back to me as soon as you can.'")
-        travelling()
     else:
         beginCutsceneAtatuqFresnelFinish()
+    if "* Let Atatuq know you've completed the Fresnel task." in AtatuqObjectives:
+        AtatuqObjectives.remove("* Let Atatuq know you've completed the Fresnel task.")
 
 ## RAMONA
 
@@ -463,6 +463,7 @@ def beginCutsceneNathanFresnel():
         NathanState[1] = 2
         NathanState[2] = 0
         AtatuqObjectives.remove("* Get Nate to fix the Fresnel lighthouse lens.")
+        AtatuqObjectives.append("* Let Atatuq know you've completed the Fresnel task.")
     elif choice == "2":
         print("\nNathan scoffs. 'Or what? You're hopeless.' \nGuess you're gonna have to try and get through to him some other way.")
     else:
