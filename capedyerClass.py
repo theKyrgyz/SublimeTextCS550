@@ -24,7 +24,7 @@ class RoomClass:
 
     kind = 'room'
 
-    def __init__(self, number, name, descrip, north, east, south, west, Atatuq, Ramona, Nathan, rope, shovel, button, woodenplanes, mapBaffin, fridge):
+    def __init__(self, number, name, descrip, north, east, south, west, atatuq, ramona, nathan, rope, shovel, button, woodenplanes, mapBaffin, fridge):
         self.number = number
         self.name = name
         self.descrip = descrip
@@ -32,9 +32,9 @@ class RoomClass:
         self.east = east
         self.south = south
         self.west = west
-        self.Atatuq = Atatuq
-        self.Ramona = Ramona
-        self.Nathan = Nathan
+        self.atatuq = atatuq
+        self.ramona = ramona
+        self.nathan = nathan
         self.rope = rope
         self.shovel = shovel
         self.button = button
@@ -43,7 +43,7 @@ class RoomClass:
         self.fridge = fridge
 
 
-CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.", "Communications Room", "The Skyway", "Confrontation Room", "Strategy Room", False, True, False, False, False, None, None, None, None)
+CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.\nTo the south is the general's office, to the north, the Comms Room. \nThe living quarters are east of here, and to the west is the Strategy Room.", "Communications Room", "The Skyway", "Confrontation Room", "Strategy Room", False, True, False, False, False, None, None, None, None)
 CommunicationsRoom = RoomClass(2, "Communications Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, False, True, False, True, None, None, None, None)
 StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, False, False, False, None, None, None, None)
 ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, True, False, False, False, False, None, None, None, None)
@@ -176,13 +176,17 @@ woodenExamination = ["woodenaircraft","woodenpieces","woodplanes","woodpieces","
 
 availableItemsList = ["rope", "shovel"]
 
-AtatuqList = ["talk to Atatuq", "talk to General Atatuq", "talk to General"]
-RamonaList = ["talk to Ramona", "talk to Ramona Butchers", "talk to Butchers"]
-NathanList = ["talk to Nathan", "talk to Nate", "talk to Nathaniel", "talk to Nathaniel Dessner", "talk to Dessner", "talk to Comms Officer"]
+AtatuqList = ["atatuq", "general atatuq", "general"]
+RamonaList = ["ramona", "ramona butchers", "butchers"]
+NathanList = ["nathan", "nate", "nathaniel", "nathaniel dessner", "dessner", "comms officer"]
 
 AtatuqFlavor = ["is sitting and stroking his beard.","is puffing on his cigar.","is scowling at you.","is punching figures into a calculator.","is slumped in his chair."]
 RamonaFlavor = ["is sulking in the corner.","is headbanging to punk music.","is tinkering with a cassette tape.","is observing a succulent.","is tracing a detailed map of the area."]
 NathanFlavor = ["is spinning in his chair.","is practicing yodeling.","is sleeping.","is eating an MRE.","isn't doing any work anytime soon."]
+
+AtatuqState = ['A', 0, 0]
+RamonaState = ['R', 0, 0]
+NathanState = ['N', 0, 0]
 
 
 # goDirection and the variables it uses <------ STARTING ROOMS
@@ -282,31 +286,122 @@ def printObjectives():
 ## doing TALK TO
 
 def talkTo():
+    """
     print("talkTo received", end=" ")
     print(*mainloopInput)
     print(rawCommandInput)
-    if (currentRoom.Atatuq == True) and (rawCommandInput in AtatuqList):
-        AtatuqTalkTo()
-    if (currentRoom.Ramona == True) and (rawCommandInput in RamonaList):
-        print("RAMONA")
-        RamonaTalkTo()
-    if (currentRoom.Nathan == True) and (rawCommandInput in NathanList):
-        NathanTalkTo()
-    else:
-        print("Either the person isn't in the room, or I don't quite understand who you're trying to talk to. Try again.")
+    """
+    if currentRoom.atatuq == True:
+        if mainloopInput[-1] in AtatuqList:
+            AtatuqTalkTo()
+    if currentRoom.ramona == True:
+        if mainloopInput[-1] in RamonaList:
+            RamonaTalkTo()
+    if currentRoom.nathan == True: 
+        if mainloopInput[-1] in NathanList:
+            NathanTalkTo()
+    print("Either the person isn't in the room, or I don't quite understand who you're trying to talk to. Try again.\nBe sure to use all LOWERCASE for names!")
     
+def AtatuqTalkTo():
+    if AtatuqState[1:] == [0,0]:
+        beginCutsceneAtatuqOne()
+    if AtatuqState[1:] == [0,1]:
+        print("'Are you done?' he yells. 'No? Then go!'")
+    if AtatuqState[1:] == [0,2]:
+        beginCutsceneAtatuqFresnelFinish()
+    else:
+        print("Atatuq waves you away.")
+    travelling()
+
+def RamonaTalkTo():
+    print("Ramona glares at you. 'Can't you tell I'm busy?'")
+    travelling()
+
+def NathanTalkTo():
+    if NathanState[1:] == [0,0]:
+        beginCutsceneNathanOne()
+    if NathanState[1:] == [1,0]:
+        beginCutsceneNathanFresnel()
+    if NathanState[2] == [2,0]:
+        beginCutsceneNathanBoat()
+    else:
+        print("Nathan thumps his hackeysack against a terminal. 'Hey! I'm workin' here!'")
+    travelling()
+
 
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
+## ATATUQ
+
+def beginCutsceneAtatuqOne():
+    print("Atatuq grimaces. 'Good morning, Lieutenant,' he barks. \n'The plan is simple today. Do your work and I won't shove my walking stick so far up your-'\n'What do you need me to do, sir?' you ask. \n'Get Nathaniel Dessner out of his chair and into the lighthouse. \nHe needs to fix the Fresnel lens by 1100 hours or that flashing light will be the last thing he sees.\nYou can find him in the Comms Room, north of here. If he isn't sleeping.'")
+    AtatuqState[2] = 1
+    NathanState[1] = 1
+    choice = input("Do you say: \n1. 'Of course, sir.'\n2. 'I'm sure he'd be more than happy to.'\n>> ")
+    if choice == "1":
+        print("'Mmph,' he grunts. What a jag. Best get to work.")
+        travelling()
+    elif choice == "2":
+        print("'That slacker would love nothing more, I'm sure.' Man, Nathaniel can be a jag sometimes. Best get to work.")
+        travelling()
+    else:
+        beginCutsceneAtatuqOne()
+
+def beginCutsceneAtatuqFresnelFinish():
+    choice = input("\nThe old general smiles. 'Did ya do it?' As you nod, he grins and pats you on the back. \n'Good work. Now, are you ready for your next task?' \n1. 'Yes, General.'\n2. 'Please, give me a moment to get ready.'\n>> ")
+    if choice == "1":
+        print("'Good,' he snaps. 'Talk to Ramona. \nI want you to work with her on collecting samples out in the Northeast Quadrant, east of the Radar Array.'")
+        AtatuqState = ["A",1,0]
+        RamonaState = ["R",1,0]
+        travelling()
+    elif choice == "2":
+        print("'Alright. But get back to me as soon as you can.'")
+        travelling()
+    else:
+        beginCutsceneAtatuqFresnelFinish()
+
+## NATHAN
+
+def beginCutsceneNathanOne():
+    choice = input("Nathan shrugs. 'Whaddaya want?'\n1. You seen the general? \n2. Not much. What's up?\n>> ")
+    if choice == "1":
+        print("'He's probably in his hidey-hole at the south end of the station. Pft.' You leave Nathan to it.")
+    elif choice == "2":
+        print("'Whatever it is, it's very important.' Nathan apparently thinks he's said enough.")
+    else:
+        beginCutsceneNathanOne()
+    travelling()
+
+def beginCutsceneNathanFresnel():
+    choice = input("Nathan shrugs. 'Whaddaya want?'\n1. 'Weren't you supposed to fix the Fresnel yesterday?' \n2. 'General's on my case again about the lens. You know what to do.'\n>> ")
+    if choice == "1":
+        print("\n'Like you're such a saint. I'll do it later.' It's a wonder Nate wasn't fired months ago.")
+    elif choice == "2":
+        print("\n'Doing things isn't my strong suit.' You both chuckle, but he doesn't seem to get the hint.")
+    else:
+        beginCutsceneNathanFresnel()
+    choice = input("Listen. If you're so intent on this, why don't you do it yourself?\n1. 'Is that whiff of insubordination I detect?' \n2. 'Because you're gonna do it.'\n>> ")
+    if choice == "1":
+        print("\nNathan smirks. 'Alright, alright. Consider it done.'")
+        AtatuqState[2] = 2
+        NathanState[1] = 2
+    elif choice == "2":
+        print("\nNathan scoffs. 'Or what? You're hopeless.' \nGuess you're gonna have to try and get through to him some other way.")
+    else:
+        beginCutsceneNathanFresnel()
+    travelling()
+    
+
+
+"""
 def beginCutscene(CutNum):
     Cutscene = True
-    print("Your location:",roomDictionary[currentRoom]["name"]+".")
-    print(roomDictionary[currentRoom]["descrip"])
     if CutNum == 1:
-        # print("WE GOT TO THE FOUR CHECK")
+        # print("WE PAST THE ONE CHECK")
         cutsceneGeneralAnatuq()
     else:
         return
+"""
 
 ## CUTSCENE 'GENERAL' PATHS
 
@@ -327,13 +422,13 @@ def travelling():
                 print("\nHere, you notice: ", sep=", ")
             print(*thingsInRoom, sep=", ")
             print("\n")
-            if currentRoom.Atatuq == True:
+            if currentRoom.atatuq == True:
                 r = random.choice(AtatuqFlavor)
-                print("Atatuq",r)
-            if currentRoom.Ramona == True:
+                print("General Atatuq",r)
+            if currentRoom.ramona == True:
                 r = random.choice(RamonaFlavor)
                 print("Ramona",r)
-            if currentRoom.Nathan == True:
+            if currentRoom.nathan == True:
                 r = random.choice(NathanFlavor)
                 print("Nathan",r)
             print("\nThe possible exits are: ")
@@ -359,9 +454,8 @@ def travelling():
         if (mainloopInput[0] == "talk") or (mainloopInput[0:1] == ["talk","to"]):
             if mainloopInput[1] != "to":
                 mainloopInput.pop(0)
-                mainloopInput.pop(0)
-                mainloopInput[0] = "talk"
-                mainloopInput[1] = "to"
+                mainloopInput.insert(0,'talk')
+                mainloopInput.insert(1, 'to')
             talkTo()
             travelling()
         if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
