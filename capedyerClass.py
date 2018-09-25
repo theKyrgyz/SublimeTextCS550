@@ -24,7 +24,7 @@ class RoomClass:
 
     kind = 'room'
 
-    def __init__(self, number, name, descrip, north, east, south, west, atatuq, ramona, nathan, rope, shovel, button, woodenplanes, mapBaffin, fridge):
+    def __init__(self, number, name, descrip, north, east, south, west, atatuq, ramona, nathan, rope, shovel, sample, button, woodenplanes, mapBaffin, fridge):
         self.number = number
         self.name = name
         self.descrip = descrip
@@ -37,22 +37,23 @@ class RoomClass:
         self.nathan = nathan
         self.rope = rope
         self.shovel = shovel
+        self.sample = sample
         self.button = button
         self.woodenplanes = woodenplanes
         self.map = mapBaffin
         self.fridge = fridge
 
 
-CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.\nTo the south is the general's office, to the north, the Comms Room. \nThe living quarters are east of here, and to the west is the Strategy Room.", "Communications Room", "The Skyway", "Confrontation Room", "Strategy Room", False, True, False, False, False, None, None, None, None)
-CommunicationsRoom = RoomClass(2, "Communications Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, False, True, False, True, None, None, None, None)
-StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, False, False, False, None, None, None, None)
-ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, True, False, False, False, False, None, None, None, None)
-HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Communications Room", None, False, False, False, False, False, None, None, None, None)
-TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False, False, False, False, None, None, None, None)
-TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Center", False, False, False, False, False, None, None, None, None)
-LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False, False, False, False, None, None, None, None)
-RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, "Survey Area 118", "Living Quarters", None, False, False, False, False, False, None, None, None, None)
-SurveyArea118 = RoomClass(10, "Survey Area 118", "A barren expense of tundra, which Command seems to think guards something special.", None, None, None, "Radar Array", False, False, False, False, False, None, None, None, None)
+CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.\nTo the south is the general's office, to the north, the Comms Room. \nThe living quarters are east of here, and to the west is the Strategy Room.", "Communications Room", "The Skyway", "Confrontation Room", "Strategy Room", False, True, False, False, False, False, "There are so many shiny buttons! Some say RED ALERT, some say FALSE ALARM, some say REMIND CREW ABOUT TRASH DUTY. Amazing!", None, None, None)
+CommunicationsRoom = RoomClass(2, "Communications Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, False, True, False, True, False, None, None, None, None)
+StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, False, False, False, False, None, None, None, None)
+ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, True, False, False, False, False, False, None, None, None, None)
+HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Communications Room", None, False, False, False, False, False, False, None, None, None, None)
+TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False, False, False, False, False, None, None, None, None)
+TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Center", False, False, False, False, False, False, None, None, None, None)
+LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False, False, False, False, False, None, None, None, None)
+RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, "Survey Area 118", "Living Quarters", None, False, False, False, False, False, False, None, None, None, None)
+SurveyArea118 = RoomClass(10, "Survey Area 118", "A barren expense of tundra, which Command seems to think guards something special.", None, None, None, "Radar Array", False, False, False, False, False, True, None, None, None, None)
 
 listRooms = [CommandCenter, CommunicationsRoom, StrategyRoom, ConfrontationRoom, HillsideSteps, TheHarbor, TheSkyway, LivingQuarters, RadarArray, SurveyArea118]
 
@@ -116,6 +117,8 @@ def inventoryTake():
             print("You "+mainloopInput[0]+" the heck out of that "+WantToTake+".")
             currentRoom.WantToTake = False
             inventory.append(WantToTake)
+            if WantToTake == "sample":
+                RamonaState[2] = 2
         else: 
             print("Seems like the item you want isn't here. \nIt might be in another room, or you might not have typed it correctly.\n")
     else:
@@ -165,8 +168,6 @@ def examineCompletion():
 takeList = ["take","grab","pickup","pick up","swipe","pick"]
 dropList = ["drop","leave","yeet"]
 
-eatList = ["consume","eat","devour","cronch","inhale"]
-
 possibleDirections = ["west","north","south","east"]
 
 global examineList
@@ -174,7 +175,7 @@ examineList = ["x", "examine", "investigate", "look"]
 buttonExamination = ["button","buttons","redbutton","bluebutton"]
 woodenExamination = ["woodenaircraft","woodenpieces","woodplanes","woodpieces","woodaircraft","aircraft","pieces"]
 
-availableItemsList = ["rope", "shovel"]
+availableItemsList = ["rope", "shovel", "sample"]
 
 AtatuqList = ["atatuq", "general atatuq", "general"]
 RamonaList = ["ramona", "ramona butchers", "butchers"]
@@ -184,6 +185,9 @@ AtatuqFlavor = ["is sitting and stroking his beard.","is puffing on his cigar.",
 RamonaFlavor = ["is sulking in the corner.","is headbanging to punk music.","is tinkering with a cassette tape.","is observing a succulent.","is tracing a detailed map of the area."]
 NathanFlavor = ["is spinning in his chair.","is practicing yodeling.","is sleeping.","is eating an MRE.","isn't doing any work anytime soon."]
 
+global AtatuqState
+global RamonaState
+global NathanState
 AtatuqState = ['A', 0, 0]
 RamonaState = ['R', 0, 0]
 NathanState = ['N', 0, 0]
@@ -314,7 +318,10 @@ def AtatuqTalkTo():
     travelling()
 
 def RamonaTalkTo():
-    print("Ramona glares at you. 'Can't you tell I'm busy?'")
+    if RamonaState[1:] == [1,0]:
+        beginCutsceneRamonaOne()
+    else:
+        print("Ramona glares at you. 'Can't you tell I'm busy?'")
     travelling()
 
 def NathanTalkTo():
@@ -322,7 +329,7 @@ def NathanTalkTo():
         beginCutsceneNathanOne()
     if NathanState[1:] == [1,0]:
         beginCutsceneNathanFresnel()
-    if NathanState[2] == [2,0]:
+    if NathanState[2:] == [2,0]:
         beginCutsceneNathanBoat()
     else:
         print("Nathan thumps his hackeysack against a terminal. 'Hey! I'm workin' here!'")
@@ -334,31 +341,65 @@ def NathanTalkTo():
 ## ATATUQ
 
 def beginCutsceneAtatuqOne():
+    UnspecObjectives.remove("* Go find General Atatuq and receive his orders.")
     print("Atatuq grimaces. 'Good morning, Lieutenant,' he barks. \n'The plan is simple today. Do your work and I won't shove my walking stick so far up your-'\n'What do you need me to do, sir?' you ask. \n'Get Nathaniel Dessner out of his chair and into the lighthouse. \nHe needs to fix the Fresnel lens by 1100 hours or that flashing light will be the last thing he sees.\nYou can find him in the Comms Room, north of here. If he isn't sleeping.'")
     AtatuqState[2] = 1
     NathanState[1] = 1
     choice = input("Do you say: \n1. 'Of course, sir.'\n2. 'I'm sure he'd be more than happy to.'\n>> ")
     if choice == "1":
         print("'Mmph,' he grunts. What a jag. Best get to work.")
-        travelling()
     elif choice == "2":
         print("'That slacker would love nothing more, I'm sure.' Man, Nathaniel can be a jag sometimes. Best get to work.")
-        travelling()
     else:
         beginCutsceneAtatuqOne()
+    AtatuqObjectives.append("* Get Nate to fix the Fresnel lighthouse lens.")
+    travelling()
 
 def beginCutsceneAtatuqFresnelFinish():
     choice = input("\nThe old general smiles. 'Did ya do it?' As you nod, he grins and pats you on the back. \n'Good work. Now, are you ready for your next task?' \n1. 'Yes, General.'\n2. 'Please, give me a moment to get ready.'\n>> ")
     if choice == "1":
         print("'Good,' he snaps. 'Talk to Ramona. \nI want you to work with her on collecting samples out in the Northeast Quadrant, east of the Radar Array.'")
-        AtatuqState = ["A",1,0]
-        RamonaState = ["R",1,0]
+        AtatuqState[1] = 1
+        AtatuqState[2] = 0
+        RamonaState[1] = 1
+        RamonaState[2] = 0
+        NathanState[1] = 2
+        NathanState[2] = 0
+        AtatuqObjectives.append("* Ask Ramona about collecting soil samples.")
         travelling()
     elif choice == "2":
         print("'Alright. But get back to me as soon as you can.'")
         travelling()
     else:
         beginCutsceneAtatuqFresnelFinish()
+
+## RAMONA
+
+def beginCutsceneRamonaOne():
+    choice = input("Ramona swivels around. 'What's up, dude.'\n1. 'Your jacket's nice today.' \n2. 'Whatcha listening to?'\n3. 'Can we skip the chit chat?'\n>> ")
+    if choice == "1":
+        print("\n'Aw, shucks, it's not like I've worn it one hundred and five times before.'\n...")
+    elif choice == "2":
+        print("\n'The Ramones, what else?' Ramona once told you she forgot to bring any cassette tapes up North... \n...except for the punk band's debut album.")
+    elif choice == "3":
+        print("\nRamona gets the hint and waits for the news.")
+    else:
+        beginCutsceneRamonaOne()
+    print("\nYou let her know the general needs soil samples from Area 118.")
+    choice = input("'Hey, I'm kinda bogged down with aircraft readouts right now. Could you do it?'\n1. 'Sure thing.' \n2. '... Alright. But you owe me one.'\n>> ")
+    if choice == "1":
+        print("\n'Thanks a gazillion, pal.'")
+    elif choice == "2":
+        print("\n'OK. I'll just write out an IOU for 'one'. Looks like a deal's been made.")
+    else:
+        beginCutsceneRamonaOne()
+    print("Ramona tosses you a key. It's gray and isn't engraved with anything. \n'This is how to get out to the array and survey spot. It's north of the living area.'")
+    inventory.append("key")
+    isLockedRadar = True
+    RamonaState[2] = [1]
+    AtatuqObjectives.remove("* Ask Ramona about collecting soil samples.")
+    RamonaObjectives.append("* Go to Survey Area 118 and collect those soil samples.")
+    travelling()
 
 ## NATHAN
 
@@ -385,6 +426,8 @@ def beginCutsceneNathanFresnel():
         print("\nNathan smirks. 'Alright, alright. Consider it done.'")
         AtatuqState[2] = 2
         NathanState[1] = 2
+        NathanState[2] = 0
+        AtatuqObjectives.remove("* Get Nate to fix the Fresnel lighthouse lens.")
     elif choice == "2":
         print("\nNathan scoffs. 'Or what? You're hopeless.' \nGuess you're gonna have to try and get through to him some other way.")
     else:
@@ -501,6 +544,15 @@ def travelling():
             printObjectives()
         elif rawCommandInput == "qy":
             quit()
+        elif rawCommandInput == "rs":
+            AtatuqState[1] = 1
+            AtatuqState[2] = 0
+            RamonaState[1] = 1
+            RamonaState[2] = 0
+            NathanState[1] = 2
+            NathanState[2] = 0
+            AtatuqObjectives.append("* Ask Ramona about collecting soil samples.")
+            print("Attempted it, at least.")
         else:
             print("Whoops! I don't quite understand that input.")
 
