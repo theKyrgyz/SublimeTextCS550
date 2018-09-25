@@ -17,11 +17,14 @@ Then the main travelling() loop is placed, which is what the player will almost 
 FINALLY, the code that kicks off the game is found. Way at the bottom.
 
 """
+
+import random as random
+
 class RoomClass:
 
     kind = 'room'
 
-    def __init__(self, number, name, descrip, north, east, south, west, rope, shovel, button, woodenplanes, mapBaffin, fridge):
+    def __init__(self, number, name, descrip, north, east, south, west, Atatuq, Ramona, Nathan, rope, shovel, button, woodenplanes, mapBaffin, fridge):
         self.number = number
         self.name = name
         self.descrip = descrip
@@ -29,6 +32,9 @@ class RoomClass:
         self.east = east
         self.south = south
         self.west = west
+        self.Atatuq = Atatuq
+        self.Ramona = Ramona
+        self.Nathan = Nathan
         self.rope = rope
         self.shovel = shovel
         self.button = button
@@ -37,18 +43,18 @@ class RoomClass:
         self.fridge = fridge
 
 
-CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.", "Apex Room", "The Skyway", "Confrontation Room", "Strategy Room", False, False, None, None, None, None)
-ApexRoom = RoomClass(2, "Apex Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, True, None, None, None, None)
-StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, None, None, None, None)
-ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, False, False, None, None, None, None)
-HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Apex Room", None, False, False, None, None, None, None)
-TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False, None, None, None, None)
-TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Room", False, False, None, None, None, None)
-LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False, None, None, None, None)
-RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, "Survey Area 118", "Living Quarters", None, False, False, None, None, None, None)
-SurveyArea118 = RoomClass(10, "Survey Area 118", "A barren expense of tundra, which Command seems to think guards something special.", None, None, None, "Radar Array", False, False, None, None, None, None)
+CommandCenter = RoomClass(1, "Command Center", "This is where the magic happens. Glittering buttons do terrifying things. \nBest not to push them.", "Communications Room", "The Skyway", "Confrontation Room", "Strategy Room", False, True, False, False, False, None, None, None, None)
+CommunicationsRoom = RoomClass(2, "Communications Room", "You look out through the glass, over the icy waters.", "Hillside Steps", None, "Command Center", None, False, False, True, False, True, None, None, None, None)
+StrategyRoom = RoomClass(3, "Strategy Room", "The westernmost room of the facility. A table stands in the center, with a map of Baffin Island taped across its entire length.", None, "Command Center", None, None, False, False, False, False, False, None, None, None, None)
+ConfrontationRoom = RoomClass(4, "Confrontation Room", "The general's office. Oof.", "Command Center", None, None, None, True, False, False, False, False, None, None, None, None)
+HillsideSteps = RoomClass(5, "Hillside Steps", "A series of rugged stairs leading from the facility down to the ocean.", "The Harbor", None, "Communications Room", None, False, False, False, False, False, None, None, None, None)
+TheHarbor = RoomClass(6, "The Harbor", "Boats, seaplanes, and icebreakers alike are lined up next to a rusty metal dock.", None, None, "Hillside Steps", None, False, False, False, False, False, None, None, None, None)
+TheSkyway = RoomClass(7, "The Skyway", "A see-through tunnel connecting the command and living centers of the base.", None, "Living Quarters", None, "Command Center", False, False, False, False, False, None, None, None, None)
+LivingQuarters = RoomClass(8, "Living Quarters", "A humble kitchen,  fit for the half-dozen inhabitants of this forsaken place.\nBut truly, why have that fridge when you could just stick the spaghetti in ice outside?", "Radar Array", None, None, "The Skyway", False, False, False, False, False, None, None, None, None)
+RadarArray = RoomClass(9, "Radar Array", "Cross-stitched metal rebar has been wrought towards the sky, \ncatching any plane in the area for two hundred miles.", None, "Survey Area 118", "Living Quarters", None, False, False, False, False, False, None, None, None, None)
+SurveyArea118 = RoomClass(10, "Survey Area 118", "A barren expense of tundra, which Command seems to think guards something special.", None, None, None, "Radar Array", False, False, False, False, False, None, None, None, None)
 
-listRooms = [CommandCenter, ApexRoom, StrategyRoom, ConfrontationRoom, HillsideSteps, TheHarbor, TheSkyway, LivingQuarters, RadarArray, SurveyArea118]
+listRooms = [CommandCenter, CommunicationsRoom, StrategyRoom, ConfrontationRoom, HillsideSteps, TheHarbor, TheSkyway, LivingQuarters, RadarArray, SurveyArea118]
 
 # a couple non-direction functions
 
@@ -170,6 +176,15 @@ woodenExamination = ["woodenaircraft","woodenpieces","woodplanes","woodpieces","
 
 availableItemsList = ["rope", "shovel"]
 
+AtatuqList = ["talk to Atatuq", "talk to General Atatuq", "talk to General"]
+RamonaList = ["talk to Ramona", "talk to Ramona Butchers", "talk to Butchers"]
+NathanList = ["talk to Nathan", "talk to Nate", "talk to Nathaniel", "talk to Nathaniel Dessner", "talk to Dessner", "talk to Comms Officer"]
+
+AtatuqFlavor = ["is sitting and stroking his beard.","is puffing on his cigar.","is scowling at you.","is punching figures into a calculator.","is slumped in his chair."]
+RamonaFlavor = ["is sulking in the corner.","is headbanging to punk music.","is tinkering with a cassette tape.","is observing a succulent.","is tracing a detailed map of the area."]
+NathanFlavor = ["is spinning in his chair.","is practicing yodeling.","is sleeping.","is eating an MRE.","isn't doing any work anytime soon."]
+
+
 # goDirection and the variables it uses <------ STARTING ROOMS
 
 global Cutscene
@@ -245,6 +260,9 @@ AtatuqObjectives = []
 RamonaObjectives = []
 NathanObjectives = []
 
+global AtatuqGameState
+AtatuqGameState = 0
+
 def printObjectives():
     if UnspecObjectives != []:
         print("\nMisc. Objectives:")
@@ -261,13 +279,30 @@ def printObjectives():
     return
 
 
+## doing TALK TO
+
+def talkTo():
+    print("talkTo received", end=" ")
+    print(*mainloopInput)
+    print(rawCommandInput)
+    if (currentRoom.Atatuq == True) and (rawCommandInput in AtatuqList):
+        AtatuqTalkTo()
+    if (currentRoom.Ramona == True) and (rawCommandInput in RamonaList):
+        print("RAMONA")
+        RamonaTalkTo()
+    if (currentRoom.Nathan == True) and (rawCommandInput in NathanList):
+        NathanTalkTo()
+    else:
+        print("Either the person isn't in the room, or I don't quite understand who you're trying to talk to. Try again.")
+    
+
 ## STARTING CUTSCENES, stopping the travelling() loop.
 
 def beginCutscene(CutNum):
     Cutscene = True
     print("Your location:",roomDictionary[currentRoom]["name"]+".")
     print(roomDictionary[currentRoom]["descrip"])
-    if CutNum == 4:
+    if CutNum == 1:
         # print("WE GOT TO THE FOUR CHECK")
         cutsceneGeneralAnatuq()
     else:
@@ -275,23 +310,14 @@ def beginCutscene(CutNum):
 
 ## CUTSCENE 'GENERAL' PATHS
 
-def cutsceneGeneralAnatuq():
-    # print("CAN YOU READ THIS?")
-    choiceOne = input("General Anatuq walks up to you. Uh oh. Do you: \n\n1) snatch his cigarette right out of his mouth, or \n\n2) try to greet him in a friendly manner?\n\n>> ")
-    if choiceOne == "1":
-        print("\n\nGeneral Anatuq is most displeased. \nWhen you regain consciousness, you find yourself abandoned in the frigid wastes outside the base.\n\n")
-        exit()
-    if choiceOne == "2":
-        print("General Anatuq smirks and says, 'Go back out there, boy. You still have work to do.'\n")
-        currentRoom = 1
-        Cutscene = False
-        travelling()
+
 
 
 def travelling():
     global newRoom
     while Cutscene == False:
         global currentRoom
+        print("\n=============", end="")
         if newRoom == True:
             print("\n\nYou are now in: ", end="")
             print(currentRoom.name)
@@ -300,7 +326,17 @@ def travelling():
             if thingsInRoom != []:
                 print("\nHere, you notice: ", sep=", ")
             print(*thingsInRoom, sep=", ")
-            print("The possible exits are: ")
+            print("\n")
+            if currentRoom.Atatuq == True:
+                r = random.choice(AtatuqFlavor)
+                print("Atatuq",r)
+            if currentRoom.Ramona == True:
+                r = random.choice(RamonaFlavor)
+                print("Ramona",r)
+            if currentRoom.Nathan == True:
+                r = random.choice(NathanFlavor)
+                print("Nathan",r)
+            print("\nThe possible exits are: ")
             for direction in possibleDirections:
                 if getattr(currentRoom,direction) != None:
                     print(direction)
@@ -320,6 +356,14 @@ def travelling():
                 WantToExamine = "".join(mainloopInput)
                 examineItem()
                 travelling()
+        if (mainloopInput[0] == "talk") or (mainloopInput[0:1] == ["talk","to"]):
+            if mainloopInput[1] != "to":
+                mainloopInput.pop(0)
+                mainloopInput.pop(0)
+                mainloopInput[0] = "talk"
+                mainloopInput[1] = "to"
+            talkTo()
+            travelling()
         if len(mainloopInput) == 2: # IF THE COMMAND IS TWO WORDS
             if mainloopInput[0] == "go":
                 break
