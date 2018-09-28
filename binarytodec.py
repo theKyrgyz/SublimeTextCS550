@@ -2,7 +2,7 @@
 
 # IMPORTS
 import sys
-import math as ma
+import math as ma # costs $0.02 to import math
 
 # SIMPLIFYING SYS.ARGV
 def commandCall(argNum):
