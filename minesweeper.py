@@ -48,3 +48,22 @@ playerBoard = [["?"]*(w) for i in range(h)]
 for pbr in playerBoard:
     print(*pbr)
 print("\n")
+Game = True
+
+def uncover():
+    xyinput = input("Which square would you like to uncover? Please input your choice as 'x,y' with 0,0 being the top left corner.\n>> ").split(",")
+    if len(xyinput) == 2:
+        ix = int(xyinput[0])
+        iy = int(xyinput[1])
+        print(ix,iy)
+    return
+
+
+# repeatedly asking input
+while Game == True:
+    flagOrUncover = input("Would you like to uncover [u] or flag [f]?\n>> ")
+    if flagOrUncover == "u":
+        uncover()
+
+
+
