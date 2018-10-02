@@ -1,113 +1,35 @@
 # minesweeper.py
-
-# IMPORTS
 import sys
-import math as ma # costs $0.02 to import math
 import random as ra 
-
-# SIMPLIFYING SYS.ARGV
 def commandCall(argNum):
     return sys.argv[int(argNum)]
-
 print("\n")
-
 if len(sys.argv) != 4:
-    print("You haven't provided the correct number of arguments.")
+    print("You haven't provided the correct number of arguments.\n")
     quit()
 
 w = int(commandCall(1))
 h = int(commandCall(2))
 b = int(commandCall(3))
-
-if b >= (w*h):
-    print("You want me to put more bombs than spots available. Too bad.")
+if ((b >= (w*h)) or (w==0) or (h==0)):
+    print("You want me to put more bombs than spots available. Too bad. \n")
     quit()
 
-board = [[0]*w for x in range(h)]
+board = [[0]*(w+2) for i in range(h+2)]
 
-# placing the bombs
-
-def runBombPlacement():
-    bx = ra.randint(0,(w-1))
-    by = ra.randint(0,(h-1))
-    # print("x+1:",bx+1,"y+1:",by+1)
-    if board[by][bx] == "*":
-        runBombPlacement()
-    else:
+global numberBombsPlaced
+numberBombsPlaced = 0
+while numberBombsPlaced < b:
+    bx = ra.randint(1,(w))
+    by = ra.randint(1,(h))
+    if board[by][bx] != "*":
         board[by][bx] = "*"
-    return
+        for x in range (-1,2):
+            for y in range (-1,2):
+                if board[by+y][bx+x] != "*":
+                    board[by+y][bx+x] += 1
+        numberBombsPlaced += 1
 
-for z in range(b):
-    runBombPlacement()
-
-# printing the updated board
-
-for each in board:
-    print(*each)
-
-# number placement function
-
-summationList = []
-global minesNumberDisplay
-minesNumberDisplay = 0
-
-def CheckComplete():
-    summationList = []
-    if y != 0:
-        if board[y-1][x] == "*":
-            summationList.append(1)
-            # print("current square sum:",sum(summationList))
-            # print(x,",",y,"got the one above it.")
-        if x != 0:
-            if board[y-1][x-1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one above and to the left of it.")
-        if not (x >= (w-1)):
-            if board[y-1][x+1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one above and to the right of it.")
-    if not (y >= (h-1)):
-        if board[y+1][x] == "*":
-            summationList.append(1)
-            # print("current square sum:",sum(summationList))
-            # print(x,",",y,"got the one below it.")
-        if x != 0:
-            if board[y+1][x-1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one below and to the left of it.")
-        if x < (w-1):
-            if board[y+1][x+1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one below and to the right of it.")
-    if x != 0:
-        if board[y][x-1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one to the left of it.")
-    if not (x >= w-1):
-        if board[y][x+1] == "*":
-                summationList.append(1)
-                # print("current square sum:",sum(summationList))
-                # print(x,",",y,"got the one to the right of it.")
-    board[y][x] = sum(summationList)
-
-
-# begin the process
-
-for y in range(h):
-    for x in range(w):
-        # print("x:",x,"y:",y,"val:",board[y][x])
-        if board[y][x] != "*":
-            CheckComplete()
-
-print("\n\n\nFinished board: \n")
-# print updated "finished product" board
-for each in board:
-    print(*each)
-
-
+for each in board[1:h+1]:
+    print(*each[1:w+1])
 print("\n")
