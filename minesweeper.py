@@ -46,16 +46,37 @@ print("\n")
 
 playerBoard = [["?"]*(w) for i in range(h)]
 for pbr in playerBoard:
-    print(*pbr)
+        print(*pbr)
 print("\n")
 Game = True
 
+# functions for loops, etc.
+def zeroProcedure():
+    print("Insert zero procedure here.")
+    return
+
+def flag():
+    print("Add flag procedure.")
+    return
+
 def uncover():
-    xyinput = input("Which square would you like to uncover? Please input your choice as 'x,y' with 0,0 being the top left corner.\n>> ").split(",")
-    if len(xyinput) == 2:
-        ix = int(xyinput[0])
-        iy = int(xyinput[1])
-        print(ix,iy)
+    xyinput = input("Which square would you like to uncover? Please input your choice as 'x,y' with 1,1 being the top left corner.\n>> ").split(",")
+    if (len(xyinput) == 2) and ((int(xyinput[0]) <= w) and (int(xyinput[1]) <= h)):
+        ix = (int(xyinput[0]) - 1)
+        iy = (int(xyinput[1]) - 1)
+        if board[iy][ix] == "*":
+            print("\n\nKA BOOM!\n\nYou have been explode. Great job.\n\n")
+            quit()
+        elif board[iy][ix] == 0:
+            zeroProcedure()
+        else:
+            print("\nYou have uncovered a "+str(board[iy][ix])+".\n")
+            playerBoard[iy][ix] = board[iy][ix]
+        for pbr in playerBoard:
+            print(*pbr)
+        print("\n")
+    else:
+        print("You have provided an unsuitable number of arguments, or your coordinates are too large.")
     return
 
 
@@ -64,6 +85,8 @@ while Game == True:
     flagOrUncover = input("Would you like to uncover [u] or flag [f]?\n>> ")
     if flagOrUncover == "u":
         uncover()
+    elif flagOrUncover == "f":
+        flag()
 
 
 
