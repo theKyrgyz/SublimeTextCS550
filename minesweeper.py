@@ -141,15 +141,14 @@ def WinState():
     global bombsFlagged
     questionMark = False
     bombsFlagged = 0
-    for wy in range(1,h):
-        for wh in range(1,w):
-            if playerBoard[wy][wh] == (bcolors.WARNING + "?" + bcolors.ENDC):
+    for wy in range(1,h+1):
+        for wh in range(1,w+1):
+            if (playerBoard[wy][wh] == (bcolors.WARNING + "?" + bcolors.ENDC)) and (board[wy][wh] != "*"):
                 # print("i found a ?")
                 questionMark = True
-                return
-            if (board[wy][wh] == "*") and (playerBoard[wy][wh] == bcolors.FAIL + "F" + bcolors.ENDC):
-                bombsFlagged = bombsFlagged + 1
-    if (bombsFlagged >= b) and (questionMark == False):
+            """ if (board[wy][wh] == "*") and (playerBoard[wy][wh] == bcolors.FAIL + "F" + bcolors.ENDC):
+                bombsFlagged = bombsFlagged + 1 """
+    if questionMark == False:
         print("You win! \033[1m YAYAYAYA \033[0m \n")
         quit()
 
@@ -167,5 +166,6 @@ while Game == True:
             uncover()
         elif turnBasedInput[0] == "f":
             flag()
-    elif turnBasedInput[0] == "q":
-        quit()
+    elif len(turnBasedInput) == 1:
+        if turnBasedInput[0] == "q":
+            quit()
