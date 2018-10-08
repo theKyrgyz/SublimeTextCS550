@@ -1,6 +1,6 @@
 # minesweeper.py
-# DATE: September 27 through October 2, 2018
-# DESCRIPTION: A WIP playable Minesweeper game. Currently the board is fully uncovered and there is no user interaction.
+# DATE: September 27 through October 5, 2018
+# DESCRIPTION: A playable Minesweeper game. Currently, flagging is supported - the only major issue is that with large boards, specific spots can be hard to find the coordinates.
 # SOURCES: Online: https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console for clearing console, and https://stackoverflow.com/questions/287871/print-in-terminal-with-colors for colors. Anan in my class helped me out tremedously with simplifying my code - from if statements checking for bombs post-placement, to a method that immediately adds to the count of squares surrounding the bomb, directly after its placement.
 
 import sys
@@ -8,7 +8,6 @@ import random as ra
 import copy
 import os
 print("\n")
-
 
 # clearing the screen
 def clsc():
@@ -67,11 +66,7 @@ for m in range(1,h+1):
     for n in range(1,w+1):
         playerBoard[m][n] = (bcolors.WARNING+"?"+bcolors.ENDC)
 clsc()
-"""
-for pbr in playerBoard:
-    print(*pbr)
-print("\n")
-"""
+
 Game = True
 
 CascadableNot = ["*","_","-","|"]
@@ -110,7 +105,7 @@ def uncover():
         iy = int(turnBasedInput[2])
         clsc()
         if board[iy][ix] == "*":
-            print("\n\nKA BOOM!\n\nYou have been explode. Great job.\n\n")
+            print("\n\n\033[4m\033[91mKA BOOM!\033[0m\n\nYou have been explode. Great job.\n\n")
             Game == False
             quit()
         elif board[iy][ix] == 0:
@@ -146,8 +141,6 @@ def WinState():
             if (playerBoard[wy][wh] == (bcolors.WARNING + "?" + bcolors.ENDC)) and (board[wy][wh] != "*"):
                 # print("i found a ?")
                 questionMark = True
-            """ if (board[wy][wh] == "*") and (playerBoard[wy][wh] == bcolors.FAIL + "F" + bcolors.ENDC):
-                bombsFlagged = bombsFlagged + 1 """
     if questionMark == False:
         print("You win! \033[1m YAYAYAYA \033[0m \n")
         quit()
