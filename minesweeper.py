@@ -95,6 +95,7 @@ def cascadingZero():
                     if board[iy+y][ix+x] == 0:
                         CascadableList.append(str(ix+x)+","+str(iy+y))
     print("You have uncovered a whole bunch of zeroes.")
+    clsc()
 
 def uncover():
     # xyinput = input("Which square would you like to uncover? Please input your choice as 'x,y' with 1,1 being the top left corner.\n>> ").split(",")
@@ -111,7 +112,7 @@ def uncover():
         elif board[iy][ix] == 0:
             cascadingZero()
         else:
-            print("\nYou have uncovered a "+str(board[iy][ix])+".\n")
+            print("You have uncovered a "+str(board[iy][ix])+".")
             playerBoard[iy][ix] = board[iy][ix]
     else:
         print("You have provided an unsuitable number of arguments, or your coordinates are too large.")
