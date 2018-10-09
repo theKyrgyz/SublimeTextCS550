@@ -1,6 +1,6 @@
 # minesweeper.py
 # DATE: September 27 through October 5, 2018
-# DESCRIPTION: A playable Minesweeper game. Currently, flagging is supported - the only major issue is that with large boards, specific spots can be hard to find the coordinates.
+# DESCRIPTION: A playable Minesweeper game. Currently, flagging is supported - the only major issue is that with large boards, specific spots' coordinates can be hard to get.  
 # SOURCES: Online: https://stackoverflow.com/questions/517970/how-to-clear-the-interpreter-console for clearing console, and https://stackoverflow.com/questions/287871/print-in-terminal-with-colors for colors. Anan in my class helped me out tremedously with simplifying my code - from if statements checking for bombs post-placement, to a method that immediately adds to the count of squares surrounding the bomb, directly after its placement.
 
 import sys
