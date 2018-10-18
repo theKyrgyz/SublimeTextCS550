@@ -1,4 +1,7 @@
 # Class1.py for Fractalz - making a standard Mandelbrot fractal image
+# DATE: October 18, 2018
+# DESCRIPTION: A quick [bodged] code that creates a Mandelbrot fractal in a specified resolution.
+# SOURCES: Just the assignment pdf with instructions.
 # want: 512x512 image
 
 from PIL import Image, ImageDraw
