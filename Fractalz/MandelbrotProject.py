@@ -129,8 +129,7 @@ ImgC1.show()
 
 
 # The second image - 'September.' Uses Mandelbrot, Color Method 2. 
-xmin, xmax = -1.786400592936561140507, -1.786395803871461587019
-ymin, ymax = -0.000002098513044253179, 0.000001493285780411937
+xmin, xmax, ymin, ymax = -1.786400592936561140507, -1.786395803871461587019, -0.000002098513044253179, 0.000001493285780411937
 ImgC3 = Image.new("RGBA",(imgx,imgy))
 ImgC3.paste((0,0,0), (0,0,imgx,imgy))
 ImgC3.save("ImgC3.png","PNG")
@@ -140,10 +139,7 @@ ImgC3.save("ImgC3.png","PNG")
 ImgC3.show()
 
 # The third image - 'Archipelago.' Uses Julia, Method 1, plus some Image Filtering from PIL to enhance color borders.
-xmin, xmax = 0.2, 0.25
-ymin, ymax = -0.60, -0.55
-imgx, imgy = 1500,1500
-maxIt = 200
+xmin, xmax, ymin, ymax, imgx, imgy, maxIt = 0.2, 0.25, -0.60, -0.55, 1500, 1500, 200
 ImgC4 = Image.new("RGBA",(imgx,imgy))
 ImgC4.paste((0,0,0), (0,0,imgx,imgy))
 julia(ImgC4,complex(0.5,-0.3),"J1")
@@ -154,10 +150,7 @@ ImgC4F.save("ImgC4.png","PNG")
 ImgC4F.show()
 
 # The fourth image - 'Quartz.' Uses Julia, Method 2.
-xmin, xmax = 0.65, 0.75
-ymin, ymax = -0.1, 0
-imgx, imgy = 1000,1000
-maxIt = 200
+xmin, xmax, ymin, ymax, imgx, imgy, maxIt = 0.65, 0.75, -0.1, 0, 1000, 1000, 200
 ImgC5 = Image.new("RGBA",(imgx,imgy))
 julia(ImgC5,complex(-0.5,0.55),"J2")
 ImgC5 = ImgC5.filter(ImageFilter.SHARPEN)
