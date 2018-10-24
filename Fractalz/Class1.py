@@ -31,8 +31,10 @@ def iterationColor():
     global iterationNumber,colorToPrint
     if iterationNumber > 254:
         colorToPrint = (255,0,0)
+    if iterationNumber == 1:
+        colorToPrint = (0,0,255)
     else:
-        colorToPrint = (iterationNumber,0,0)
+        colorToPrint = (iterationNumber,(iterationNumber%3)*50,0)
 
 cx = 2
 cy = 2
@@ -44,8 +46,8 @@ iterationNumber = 0
 # image creation: assigning pixel 
 # square - 256, then divide by 128
 
-imgx = 512
-imgy = 512
+imgx = 2000
+imgy = 2000
 
 ImgA = Image.new("RGBA",(imgx,imgy))
 ImgA.paste((0,0,0), (0,0,imgx,imgy))
