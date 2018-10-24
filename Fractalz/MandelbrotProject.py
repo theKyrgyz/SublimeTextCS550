@@ -5,6 +5,16 @@
 # SOURCES: Documentation for complex numbers and PIL features: https://docs.python.org/3/library/functions.html?highlight=complex#complex , https://pillow.readthedocs.io/en/5.1.x/reference/ImageFilter.html
 #          Dropbox file for Julia fractal set: https://www.dropbox.com/s/tie5910sltnkxq3/mandelbrot_reading.pdf?dl=0
 
+"""
+A QUICK NOTE ON THE FRACTCALS.
+Both the Mandelbrot set and the Julia set uses complex number manipulation [squaring and addition] to create a grid of squares with varying required-iteration values.
+In the Mandelbrot set, each square in a set grid has a constant value. To determine how many iterations that square 'has', we create a complex number at the origin, 0 + 0i, and square it, then add the grid square's constant (called c).
+We repeat this until the complex number (z)'s absolute value is greater or equal to 2. Then we stop, and color the grid square in according to its iteration number.
+In the Julia set, the idea is similar, except the first z (z0, or z1 depending on methods used) is actually at the square in the grid (what would have been the constant in the Mandelbrot).
+The constant this time is predetermined and is the same for the entire grid. Regardless, the z = z^2 + c rule still holds true. The great thing about the Julia set
+is the ability to change the overarching constant and get completely different fractals. But, in summation, complex numbers and constants are used to create these images. (z^2 + c) = the new z.
+"""
+
 # Importing some OS stuff, plus PIL's Image modules and the datetime module.
 from PIL import Image, ImageFilter
 import random, getpass
