@@ -4,6 +4,7 @@
 #              Each has a different color scheme. 
 # SOURCES: Documentation for complex numbers and PIL features: https://docs.python.org/3/library/functions.html?highlight=complex#complex , https://pillow.readthedocs.io/en/5.1.x/reference/ImageFilter.html
 #          Dropbox file for Julia fractal set: https://www.dropbox.com/s/tie5910sltnkxq3/mandelbrot_reading.pdf?dl=0
+# HONOR CODE: On my honor, I have neither given nor received unauthorized aid.
 
 """
 A QUICK NOTE ON THE FRACTCALS.
