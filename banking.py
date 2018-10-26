@@ -1,4 +1,5 @@
 # banking.py
+# Account management
 
 import random
 
@@ -14,7 +15,7 @@ def askPin():
 
 def genID():
         y = "0"
-        for i in range(0,5):
+        for i in range(0,4):
             z = str(random.randint(0,9))
             y += z
         return str(y)
@@ -42,6 +43,10 @@ class Account:
         self.amount += amtToAdd
         print("Deposit was successful. Current balance is: $"+str(self.amount)+"\n")
 
+    def withdraw(self, amtToRemove):
+        self.amount -= amtToRemove
+        print("Withdrawal was successful. Grab your cash and go! Current balance is: $"+str(self.amount)+"\n")
+
     def checkPin(self, guess):
         if str(g) == str(self.PIN):
             return True
@@ -65,6 +70,16 @@ def inputLoop():
                 x = input("Please state how much of the revenue from your exploited labor you'd like to deposit.\n>> ")
                 if int(x) != ValueError:
                     listAccounts[vCurr].deposit(int(x))
+                else:
+                    print("That's not a number.")
+            else:
+                print("\nIncorrect PIN. I'm calling the police.\n")
+        elif choice == "2":
+            g = input("Please input your PIN.")
+            if listAccounts[vCurr].checkPin(g) == True:
+                x = input("Please state how much moolah you'd like to withdraw.\n>> ")
+                if int(x) != ValueError:
+                    listAccounts[vCurr].withdraw(int(x))
                 else:
                     print("That's not a number.")
             else:
