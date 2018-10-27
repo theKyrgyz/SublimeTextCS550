@@ -62,7 +62,7 @@ print(listAccounts[0].__dict__)
 def inputLoop():
     while True:
         listAccounts[vCurr].stats()
-        choice = input("(1) Make a deposit.\n(2) Make a withdrawl.\n(3) Change PIN.\n(4) Close account.\n>> ")
+        choice = input("(1) Make a deposit.\n(2) Make a withdrawl.\n(3) Change PIN.\n(4) Shut down [PERMANENTLY close] account. \n(5) Exit your account.\n>> ")
         if choice == "1":
             global g
             g = input("Please input your PIN.")
