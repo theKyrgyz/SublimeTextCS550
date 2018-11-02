@@ -40,9 +40,22 @@ class axolotl:
                 self.hunger = 0
             if self.energy > 10:
                 self.energy = 10
-            status = self.name+" just that sweet sweet yum yum."
+            status = self.name+" just gobbled that sweet sweet yum yum."
         else:
             status = self.name+" wouldn't take a single bite."
+
+    def sleep(self):
+        status = ""
+        if self.energy > 0:
+            self.hunger += 2
+            self.energy += 5
+            if self.hunger > 10:
+                self.hunger = 10
+            if self.energy < 0:
+                self.energy = 0
+            status = self.name+" slept soundly for the day."
+        else:
+            status = self.name+" is too restless! They won't sleep now."
 
     def checkWild(self):
         if self.wild == True:
@@ -88,6 +101,8 @@ def mainLoop():
         choice = input("Choose how you'd like to care for your pet.\n>> ")
         if choice == "eat":
             P1.eat(howMuchEat())
+        elif choice == "sleep":
+            P1.sleep()
         else:
             print("I don't quite understand that.")
 mainLoop()
