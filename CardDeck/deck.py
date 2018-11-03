@@ -32,7 +32,7 @@ class Deck:
             print("This deck empty, yeet.")
             return
         for i in self.CLID:
-            print(i.showName())
+            i.showName()
         print("\n")
 
     def shuffleDeck(self):
