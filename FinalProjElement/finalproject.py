@@ -1,38 +1,22 @@
 # finalproject.py
 
-# An element manipulator by Lucas Eggers
+# An element and periodic table manipulator by Lucas Eggers
 # DATE: November 3, 2018
-# DESCRIPTION: 
+# DESCRIPTION: This project uses two Python code files and a csv file to create two object classes [Element and PeriodicTable] which can then be manipulated and used to calculate things,
+#              like the weight of a given molecule.
 # SOURCES: https://docs.python.org/3/library/csv.html for importing csv files into Python
 #          https://stackoverflow.com/questions/736043/checking-if-a-string-can-be-converted-to-float-in-python for string-to-float checks
 
-""" 
-Assignment:
-Compose  a  data  type  Element  for  entries  in  the  periodic  table  of 
-elements.  Include  data  type  values  for  element,  atomic  number, symbol, 
-and  atomic  weight  and  accessor  methods  for  each  of  these  values. 
-Then,  create  a  data  type  PeriodicTable  that  reads  values  from a  file  to 
-create  a  list  of  Element  objects  and  responds  to  queries  on  input  so  that 
-a  user  can  type  a  molecular  equation  like  H2O  and  the  program 
-responds  by  printing  the  molecular  weight.  What  other  kinds  of 
-interactions  can  you  create  within  this  class? 
-The  file  here: 
-https://introcs.cs.princeton.edu/python/32class/elements.csv 
-contains the  data  that  the program  should  read.  
-Include  fields  for element, atomic  number, symbol,  and  atomic  weight.
-"""
-
-import element
+import element, csv, re, string
 from element import Element
-import csv, re, string
 
 element.importTest()
-
-elementList = []
 
 class PeriodicTable:
     kind = 'periodic table'
     def __init__(self, inputFile):
+        global elementList
+        elementList = []
         self.inputFile = inputFile
         self.create()
         # self.FL is the 'Full List' of inputted elements in that periodic table.
@@ -84,13 +68,13 @@ class PeriodicTable:
     def ElemBySymbol(self,sym):
         for elemTest in self.FL:
             if str(elemTest.symbol) == str(sym):
-                print("\n")
                 f = elemTest
                 return f
-        print("I don't see any element with that symbol.")
+        return None
+        # print("I don't see any element with that symbol.")
 
     def WeightMolec(self,inputMol):
-        print(inputMol)
+        # print(inputMol)
         molWeight = 0.0
         for chunk in inputMol:
             y, z = "None", "0"
@@ -107,9 +91,13 @@ class PeriodicTable:
                     y = chunk[:x]
                     z = chunk[x:]
                     # print("Yes!")
-            if y != "None":
+            if (y != "None") and (self.ElemBySymbol(str(y)) != None):
                 molWeight += float((self.ElemBySymbol(str(y))).weight) * float(z)
+            if self.ElemBySymbol(str(y)) == None:
+                print("NOTE TO USER: In your molecule you've inputted \na symbol which doesn't have a corresponding element. \nThis means your result won't be accurate. \nBe advised.")
         return molWeight
+
+# VARIOUS NON-CLASS FUNCTIONS - the MAIN LOOP (beginRequest) and the STRING MANIPULATOR (splitter)
 
 def splitter(s):
     l = list(s)
@@ -125,7 +113,7 @@ def splitter(s):
         v += 1
     return resultList
 
-def BeginRequest(p):
+def beginRequest(p):
     choice = input("What would you like to do in the wonderful world of chemistry today?\n1  Find an element by atomic number.\n2  Find an element by name.\n3  Find an element by atomic weight [precision required].\n4  Find an element by symbol.\nM  Find the weight of a molecule. [COOL FEATURE!]\nQ  Quit.\n\n>> ")
     if choice == "1":
         i = input("\nPlease input the number of the element you wish to find.\n>> ")
@@ -135,21 +123,21 @@ def BeginRequest(p):
         except ValueError:
             print("\n")
     elif choice == "2":
-        i = input("\nPlease input the name of the element you wish to find. Capitalization and spelling are key.\n>> ")
+        i = input("\nPlease input the name of the element you wish to find. \nCapitalization and spelling are key.\n>> ")
         p.ElemByName(i)
     elif choice == "3":
-        i = input("\nPlease input the weight of the element you wish to find. Note: must be exactly what is on file.\n>> ")
+        i = input("\nPlease input the weight of the element you wish to find. \nNote: must be exactly what is on file.\n>> ")
         try:
             float(i)
             p.ElemByWeight(i)
         except ValueError:
             print("\n")
     elif choice == "4":
-        i = input("\nPlease input the symbol of the element you wish to find. Capitalization and spelling are key.\n>> ")
+        i = input("\nPlease input the symbol of the element you wish to find. \nCapitalization and spelling are key.\n>> ")
         (p.ElemBySymbol(i)).show()
         print("\n")
     elif choice == "M":
-        i = input("\nPlease input the chemical formula of the molecule whose atomic weight you want to find.\n>> ")
+        i = input("\nPlease input the chemical formula of the molecule \nwhose molecular weight you want to find.\n>> ")
         print("\nThe weight of this molecule,",i,", is:",round(p.WeightMolec(splitter(i)), 4),"\n")
     elif choice.upper() == "Q":
         print("\n")
@@ -159,6 +147,7 @@ def BeginRequest(p):
 
 P1 = PeriodicTable("elements.csv")
 
+print("\nNOW ENTERING... CAMERON'S CRAZY and CONCIEVABLY CRIMINAL CHEMICAL CACHE!!!\n")
 while True:
-    BeginRequest(P1)
+    beginRequest(P1)
 

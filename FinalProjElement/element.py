@@ -1,4 +1,6 @@
 # element.py
+# part of the Periodic Table project by Lucas Eggers
+# main file is finalproject.py
 
 import random
 from random import shuffle
