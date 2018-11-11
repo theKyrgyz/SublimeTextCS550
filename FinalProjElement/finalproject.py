@@ -62,15 +62,16 @@ class PeriodicTable:
                 print("\n")
                 f = elemTest
                 return
-        print("\nI don't see any element with that weight.")
+        print("\nI don't see any element with that weight.\n")
 
     def ElemByName(self,name):
+        name = name.capitalize()
         for elemTest in self.FL:
             if str(elemTest.element) == str(name):
                 elemTest.show()
                 print("\n")
                 f = elemTest
-                return
+                return f
         print("\nI don't see any element with that name.")
 
     # This one in particular is used in the molecular weight function to call the weight of element based on its symbol.
@@ -80,6 +81,7 @@ class PeriodicTable:
                 f = elemTest
                 return f
         return None
+        print("\n")
 
     # The function which determines the weight of the molecule, inputted by user.
     def WeightMolec(self,inputMol):
@@ -111,6 +113,7 @@ class PeriodicTable:
                 print("NOTE TO USER: In your molecule you've inputted \na symbol which doesn't have a corresponding element. \nThis means your result won't be accurate. \nBe advised.")
         return molWeight
 
+    # checking ionic bond stability based on the number of electrons in the combined molecule
     def ionicStability(self,a,b):
         ionicList = [2,4,12,20,28,36,44,52,60,68,76,84,90,118]
         print("\nBased on the number of electrons in each element...")
@@ -119,7 +122,7 @@ class PeriodicTable:
         elif ((a+b)-1 in ionicList) or ((a+b)+1 in ionicList):
             print("\nThat would combine to form a poor ionic bond. \nStability would be low, and the resulting compound would be highly reactive.")
         else:
-            print("\nIonic bond stability uncertain... wouldn't be entirely stable, but not entirely reactive either.")
+            print("\nIonic bond stability uncertain. \nThe bond would not be entirely stable, but not entirely reactive either.")
         print("\nNumber of electrons in the molecule with the ionic bond would be:",(a+b),".\n")
 
 
@@ -141,54 +144,55 @@ def splitter(s):
     return resultList
 
 def beginRequest(p):
-    choice = input("What would you like to do in the wonderful world of chemistry today?\nF  Find an element by name, number, or symbol.\nW  Find an element by atomic weight [precision required].\nI  Check the stability of an ionic bond between two given elements.\nM  Find the weight of a molecule. [COOL FEATURE!]\nQ  Quit.\n\n>> ")
-    if choice.upper() == "F":
+    choice = input("What would you like to do in the wonderful world of chemistry today?\nFIN  Find an element by name, number, or symbol.\nWGT  Find an element by atomic weight [precision required].\nION  Check the stability of an ionic bond between two given elements.\nMOL  Find the weight of a molecule. [COOL FEATURE!]\nQ  Quit.\n\nOTHERWISE, just input the name, number, or symbol of an element for info.\n\n>> ")
+    if choice.upper() == "FIN":
         i = input("\nPlease input the number, name, or symbol of the element you wish to find.\n>> ")
         try:
             int(float(i))
-            if str(int(float(i))) != str(float(i)):
-                print("\nThe number you've put in isn't an integer. \nRounding...\n")
+            if str(int(float(i))+0.0) != str(float(i)):
+                print("\nThe number you've put in isn't an integer. \nRounding down...\n")
             p.ElemByNumber(int(float(i)))
         except ValueError:
             if len(i) < 3:
                 if (p.ElemBySymbol(i)) != None:
                     (p.ElemBySymbol(i)).show()
+                    print("\n")
                 else:
                     print("\nSorry, I don't see an element with that symbol.")
             else:
                 p.ElemByName(i)
         print("\n")
-    elif choice.upper() == "W":
+    elif choice.upper() == "WGT":
         i = input("\nPlease input the weight of the element you wish to find. \nNote: must be exactly what is on file.\n>> ")
         try:
             float(i)
             p.ElemByWeight(i)
         except ValueError:
             print("\n")
-    elif choice.upper() == "I":
+    elif choice.upper() == "ION":
         a = input("\nPlease input the symbol or the name of the first element in the bond.\n>> ")
         if len(a) < 3:
             if (p.ElemBySymbol(a)) != None:
                 a = p.ElemBySymbol(a)
+                a.show()
             else:
                 print("\nSorry, I don't see an element with that symbol.")
         else:
-            p.ElemByName(a)
-            a = f
+            a = p.ElemByName(a)
         b = input("\nPlease input the symbol or the name of the second element in the bond.\n>> ")
         if len(b) < 3:
             if (p.ElemBySymbol(b)) != None:
                 b = p.ElemBySymbol(b)
+                b.show()
             else:
                 print("\nSorry, I don't see an element with that symbol.")
         else:
-            p.ElemByName(b)
-            b = f
+            b = p.ElemByName(b)
         if (type(a) == element.Element) and (type(b) == element.Element):
             p.ionicStability(int((a).number),int((b).number))
         else:
-            print("Sorry, it seems like somewhere along the line you didn't input an element.")
-    elif choice.upper() == "M":
+            print("\nSorry, it seems like somewhere along the line you didn't input an element.\n")
+    elif choice.upper() == "MOL":
         i = input("\nPlease input the chemical formula of the molecule \nwhose molecular weight you want to find.\n>> ")
         print("\n")
         print("\nThe weight of this molecule,",i,", is:",round(p.WeightMolec(splitter(i)), 4),"\n")
@@ -196,7 +200,22 @@ def beginRequest(p):
         print("\n")
         quit()
     else:
-        print("I don't understand.\n")
+        # if no option is clearly chosen, run it through the general info-search intelligence function
+        i = choice
+        try:
+            int(float(i))
+            if str(int(float(i))+0.0) != str(float(i)):
+                print("\nThe number you've put in isn't an integer. \nRounding down...\n")
+            p.ElemByNumber(int(float(i)))
+        except ValueError:
+            if len(i) < 3:
+                if (p.ElemBySymbol(i)) != None:
+                    (p.ElemBySymbol(i)).show()
+                    print("\n")
+                else:
+                    print("\nSorry, I don't see an element with that symbol.")
+            else:
+                p.ElemByName(i)
 
 # CREATING THE PERIODIC TABLE
 P1 = PeriodicTable("elements.csv")
